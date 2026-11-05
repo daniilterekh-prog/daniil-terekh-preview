@@ -1,0 +1,57 @@
+[
+  {
+    "name": "01-hero",
+    "selector": "#hero",
+    "file": "01-hero.html"
+  },
+  {
+    "name": "02-work",
+    "selector": "#work",
+    "file": "02-work.html"
+  },
+  {
+    "name": "03-find-the-signal",
+    "selector": "#thinking",
+    "file": "03-find-the-signal.html"
+  },
+  {
+    "name": "04-the-edit",
+    "selector": "#the-edit",
+    "file": "04-the-edit.html"
+  },
+  {
+    "name": "05-skills",
+    "selector": "#skills",
+    "file": "05-skills.html"
+  },
+  {
+    "name": "05a-services",
+    "selector": "#services",
+    "file": "05a-services.html"
+  },
+  {
+    "name": "05b-cycle",
+    "selector": "#cycle",
+    "file": "05b-cycle.html"
+  },
+  {
+    "name": "06-the-evidence",
+    "selector": "#evidence",
+    "file": "06-the-evidence.html"
+  },
+  {
+    "name": "07-still-curious",
+    "selector": "#human",
+    "file": "07-still-curious.html"
+  },
+  {
+    "name": "08-whats-your-story",
+    "selector": "#contact",
+    "file": "08-whats-your-story.html"
+  },
+  {
+    "name": "09-footer",
+    "selector": "#site-footer",
+    "file": "09-footer.html"
+  }
+]
