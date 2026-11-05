@@ -11,12 +11,21 @@
  const morph=document.createElement('canvas');morph.className='signal-morph';morph.setAttribute('aria-hidden','true');visual.append(morph);
  const context=morph.getContext('2d');
  const sources=[original[3],original[1],original[18]],goals=['ATTRACT QUALIFIED CLIENTS.','FIX THE JOURNEY FIRST.','TEST. MEASURE. SCALE.'];
- let visible=false,queued=0,sceneFrame=0,lastTime=0,clock=0,progress=0,state=model.flightState(0),width=0,height=0;
+ let visible=false,scrollDirty=true,sceneFrame=0,lastTime=0,clock=0,progress=0,state=model.flightState(0),width=0,height=0;
  function motionReduced(){return media.matches;}
- function resizeMorph(){const r=visual.getBoundingClientRect();width=r.width;height=r.height;const dpr=Math.min(devicePixelRatio||1,1.5);morph.width=Math.round(width*dpr);morph.height=Math.round(height*dpr);if(context)context.setTransform(dpr,0,0,dpr,0,0);paint();}
+ function resizeMorph(){glyphMetrics.clear();const r=visual.getBoundingClientRect();width=r.width;height=r.height;const dpr=Math.min(devicePixelRatio||1,1.5);morph.width=Math.round(width*dpr);morph.height=Math.round(height*dpr);if(context)context.setTransform(dpr,0,0,dpr,0,0);paint();}
+ const glyphMetrics=new Map();
+ function textMetrics(text,font){
+  const key=font+"\n"+text;
+  if(!glyphMetrics.has(key)){
+   context.font=font;
+   glyphMetrics.set(key,{width:context.measureText(text).width,offsets:Array.from(text,(_,i)=>context.measureText(text.slice(0,i)).width)});
+  }
+  return glyphMetrics.get(key);
+ }
  function textPositions(text,font,y){
-  context.font=font;const start=(width-context.measureText(text).width)/2;
-  return Array.from(text).map((char,i)=>({char,x:start+context.measureText(text.slice(0,i)).width,y}));
+  const metrics=textMetrics(text,font),start=(width-metrics.width)/2;
+  return Array.from(text).map((char,i)=>({char,x:start+metrics.offsets[i],y}));
  }
  function ellipse(ctx,x,y,rx,ry){ctx.beginPath();ctx.ellipse(x,y,Math.max(1,rx),Math.max(1,ry),0,0,Math.PI*2);}
  function drawGlass(){
@@ -68,7 +77,7 @@
    ctx.font='700 '+size+'px ThinkingNarrow';ctx.fillStyle='#f0f1ed';
    lines.forEach((line,j)=>{Array.from(line).forEach((char,k)=>{
     ctx.globalAlpha=alpha*model.smooth(k/line.length*.7,k/line.length*.7+.3,arrival);
-    ctx.fillText(char,x+ctx.measureText(line.slice(0,k)).width,y+(j-.3)*size*1.12);
+    ctx.fillText(char,x+textMetrics(line,ctx.font).offsets[k],y+(j-.3)*size*1.12);
    });});
    ctx.globalAlpha=alpha*.65;
    // Light travels out of the glass, decelerating before the new words.
@@ -86,7 +95,7 @@
   const targetSize=Math.min(width<600?32:68,width*.085);
   const split=model.smooth(.38,.58,progress),assemble=model.smooth(.65,.92,progress);
   for(let g=0;g<3;g++){
-   context.font=sourceSize+'px Georgia';const fitted=sourceSize*Math.min(1,width*.88/context.measureText(sources[g]).width);
+   context.font=sourceSize+'px Georgia';const fitted=sourceSize*Math.min(1,width*.88/textMetrics(sources[g],sourceSize+'px Georgia').width);
    const sourceFont=fitted+'px Georgia',targetFont='700 '+(g===0?targetSize:targetSize*.72)+'px ThinkingNarrow';
    const src=textPositions(sources[g],sourceFont,height*(.34+g*.17));
    const dst=textPositions(goals[g],targetFont,height*(.36+g*.17));
@@ -164,20 +173,28 @@
   clarity.style.opacity=state.result;
   drawMorph();
  }
- function animate(now){sceneFrame=0;if(!visible||document.hidden||main.hidden||media.matches)return;clock+=Math.min(.05,(now-(lastTime||now))/1000);lastTime=now;paint();sceneFrame=requestAnimationFrame(animate);}
+ function animate(now){
+  sceneFrame=0;
+  if(!visible||document.hidden||main.hidden)return;
+  if(scrollDirty){scrollDirty=false;scrollState();}
+  if(!media.matches){clock+=Math.min(.05,(now-(lastTime||now))/1000);lastTime=now;}
+  paint();
+  if(!media.matches)sceneFrame=requestAnimationFrame(animate);
+ }
  function syncMotion(){
   if(sceneFrame)cancelAnimationFrame(sceneFrame);sceneFrame=0;lastTime=0;
-
-  if(visible&&!document.hidden&&!main.hidden&&!media.matches)sceneFrame=requestAnimationFrame(animate);else paint();
+  requestScrollState();
  }
  function scrollState(){
-  queued=0;if(main.hidden)return;
   const travel=Math.max(1,section.offsetHeight-sticky.offsetHeight);
   progress=Math.max(0,Math.min(1,-section.getBoundingClientRect().top/travel));
   if(media.matches)progress=[0,.3,.6,1][Math.min(3,Math.floor(progress*4))];
-  state=model.flightState(progress);paint();
+  state=model.flightState(progress);
  }
- function requestScrollState(){if(!queued)queued=requestAnimationFrame(scrollState);}
+ function requestScrollState(){
+  scrollDirty=true;
+  if(visible&&!document.hidden&&!main.hidden&&!sceneFrame)sceneFrame=requestAnimationFrame(animate);
+ }
  function measureThinking(){
   if(main.hidden)return;
   section.style.minHeight=(sticky.offsetHeight+Math.round(window.DTViewport.height()*2.2))+'px';sticky.style.top='0px';resizeMorph();requestScrollState();
@@ -187,7 +204,7 @@
  window.addEventListener('scroll',requestScrollState,{passive:true});window.addEventListener('resize',measureThinking,{passive:true});
  window.addEventListener('hashchange',requestScrollState);document.addEventListener('visibilitychange',syncMotion);media.addEventListener('change',syncMotion);
  new MutationObserver(()=>{measureThinking();syncMotion();}).observe(main,{attributes:true,attributeFilter:['hidden']});
- if(document.fonts)document.fonts.ready.then(resizeMorph);measureThinking();
+ if(document.fonts)document.fonts.ready.then(()=>{glyphMetrics.clear();resizeMorph();});measureThinking();
  const edit=document.getElementById('the-edit');
  const edits=[
   {copy:'Remove the distraction. Keep the purpose.\nEvery element should earn its place.',title:['Less noise.','More meaning.']},

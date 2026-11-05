@@ -12,6 +12,7 @@ const caseContent={
 };
 const byId=id=>document.getElementById(id);
 const site=byId('site'), section=byId('work'), sticky=byId('storySticky'), frame=byId('storyFrame'), track=byId('storyScreens'), phoneTrack=byId('storyPhoneScreens');
+let lastPaintLocal=null;
 let active=0, metrics=null, lastRouteScroll=0, animRaf=0, changingMeta=false;
 let reduced=Boolean(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches);
 const clamp=(n,a=0,b=1)=>Math.max(a,Math.min(b,n));
@@ -49,12 +50,15 @@ function measureStory(){
  const endLeft=(stageW-targetW*(mobile?1:1.15))/2;
  const startTop=mobile?stageH*.235:stageH*.06;
  const endTop=mobile?stageH*.145:stageH*.12;
+ lastPaintLocal=null;
  metrics={mobile,start,stageH,stageW,labH,introDist,slideDist,outroDist,targetW,initialW,startLeft,endLeft,startTop,endTop};
  section.dataset.scrollStops=JSON.stringify(companies.map((_,i)=>Math.round(start+(i===0?introDist*.94:introDist+((i-1)+.92)*slideDist))));
 }
 function paintStory(){
  if(!metrics||byId('mainPage').hidden)return;
- const m=metrics,local=Math.max(0,window.scrollY-m.start),enter=smooth(clamp(local/m.introDist));
+ const m=metrics,local=clamp(window.scrollY-m.start,0,m.introDist+Math.max(0,companies.length-1)*m.slideDist);
+ if(local===lastPaintLocal)return;lastPaintLocal=local;
+ const enter=smooth(clamp(local/m.introDist));
  const screenW=lerp(m.initialW,m.targetW,enter);
  const left=lerp(m.startLeft,m.endLeft,enter),top=lerp(m.startTop,m.endTop,enter);
  const rotateY=lerp(m.mobile?-9:-14,m.mobile?0:-1,enter),rotateZ=lerp(m.mobile?-4:6,m.mobile?0:3,enter);
