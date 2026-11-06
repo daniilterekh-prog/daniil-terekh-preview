@@ -158,14 +158,17 @@
   visual.style.setProperty('--orbit-y',(140-progress*100)+'deg');
   visual.style.setProperty('--orbit-zoom',state.zoom);
   noise.style.opacity=state.noise;noise.style.transform='perspective(1100px)';
-  phrases.forEach((phrase,i)=>{
+  if(state.noise>.001)phrases.forEach((phrase,i)=>{
    const flow=model.flowState(media.matches?2:clock,i),lane=i%10;
    const travel=media.matches?.2:flow.travel;
-   phrase.style.left=(5+travel*30)+'%';phrase.style.top=(25+lane*5.8+(Math.sin(i*2.4+clock*.16)*.5))+'%';
    const entrance=flow.t<.5?model.smooth(0,.07,flow.t):0;
-   phrase.style.opacity=String((media.matches?(i<10?.8:0):entrance)*(.65+(i%3)*.16));
+   const opacity=(media.matches?(i<10?.8:0):entrance)*(.65+(i%3)*.16);
+   phrase.style.opacity=String(opacity);
+   if(opacity<.001)return;
+   // Fixed layout coordinates; animate translation without reflowing each phrase.
+   phrase.style.left='5%';phrase.style.top=(25+lane*5.8)+'%';
    phrase.style.filter='none';
-   phrase.style.transform='translateX(-'+(travel*40)+'%) scale('+(1-travel*.18)+')';
+   phrase.style.transform='translate3d('+(travel*width*.3)+'px,'+(Math.sin(i*2.4+clock*.16)*height*.005)+'px,0) translateX(-'+(travel*40)+'%) scale('+(1-travel*.18)+')';
    const copy=original[(i+flow.cycle+original.length*10)%original.length];
    if(phrase.textContent!==copy||!phraseGlyphs.has(phrase))setPhrase(phrase,copy);
    const glyphs=phraseGlyphs.get(phrase);
@@ -192,7 +195,8 @@
   if(scrollDirty){scrollDirty=false;scrollState();}
   if(!media.matches){clock+=Math.min(.05,(now-(lastTime||now))/1000);lastTime=now;}
   paint();
-  if(!media.matches)sceneFrame=requestAnimationFrame(animate);
+  // Only the entrance has live motion; the later frames update on actual scroll.
+  if(!media.matches&&state.noise>.001)sceneFrame=requestAnimationFrame(animate);
  }
  function syncMotion(){
   if(sceneFrame)cancelAnimationFrame(sceneFrame);sceneFrame=0;lastTime=0;

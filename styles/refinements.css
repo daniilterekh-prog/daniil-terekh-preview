@@ -524,10 +524,9 @@ html { scroll-behavior:auto!important;scroll-padding-top:0; }
 #mainPage { overflow-anchor:none; }
 .thinking-bottom { pointer-events:auto; }
 
-/* Skills remain pinned for one additional deliberate scroll gesture. */
+/* Skills scroll with their content; no extra hold after the solution cards. */
 .skills-lab { position:relative;overflow:visible; }
-.skills-showcase { position:sticky;top:0; }
-.skills-lab:has(.skills-list:not([hidden])) .skills-showcase { position:relative; }
+.skills-showcase { position:relative; }
 
 /* Give the lens enough visual weight on touch screens. */
 .signal-fallback .fallback-lens { transform:translate(447px,330px) scale(1.15) translate(-447px,-330px); }
@@ -938,7 +937,6 @@ html { scroll-behavior:auto!important;scroll-padding-top:0; }
 .skills-leaf:last-child { background:linear-gradient(135deg,#373838,#1a1b1b); }
 .skills-leaf h4 { font:500 10px/1.4 var(--sans);letter-spacing:.07em;margin:0 0 24px;color:#aaa; }
 .skills-leaf p { font:15px/1.45 var(--sans);margin:0;color:#f3f3ef;overflow-wrap:anywhere; }
-#skills .skills-underlying { font:12px/1.5 var(--sans);margin-top:20px;color:#b9b9b9; }
 #skills .skills-stage { height:clamp(280px,40svh,470px); }
 #skills[data-variant="5"] .skills-cube.is-selected .sk-cap { transform:translateZ(var(--depth));background:#343535; }
 #skills .skills-connections path { stroke-dasharray:none;stroke-width:2; }
@@ -953,8 +951,6 @@ html { scroll-behavior:auto!important;scroll-padding-top:0; }
  .skills-leaf { min-height:164px;padding:16px 10px; }
  .skills-leaf h4 { font-size:9px;letter-spacing:.025em;margin-bottom:16px; }
  .skills-leaf p { font-size:12px;line-height:1.45; }
- #skills .skills-detail-nav { flex-direction:row;justify-content:flex-start;margin-top:16px; }
- #skills .skills-underlying { margin-top:14px; }
 }
 @media(prefers-reduced-motion:reduce) { .skills-leaf { transform:none; } }
 

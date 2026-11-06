@@ -1,6 +1,6 @@
 (function(){
  'use strict';
- const DURATION=600,QUIET=180,TOLERANCE=8;
+ const QUIET=180,TOLERANCE=8;
  function nextTarget(points,y,direction){
   const point=direction>0?points.find(p=>p.y>y+TOLERANCE):[...points].reverse().find(p=>p.y<y-TOLERANCE);
   return point?point.y:null;
@@ -8,7 +8,7 @@
  if(typeof module==='object'&&module.exports){module.exports={nextTarget};return;}
  const main=document.getElementById('mainPage');if(!main)return;
  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
- let points=[],animation=0,animationDirection=0,wheelGesture=null,touch=null;
+ let points=[],animation=0,animationDirection=0,animationTarget=null,wheelGesture=null,touch=null;
  let measuredWidth=0,measuredHeight=0;
  const absolute=e=>e.getBoundingClientRect().top+scrollY;
  function measure(){
@@ -31,29 +31,20 @@
    const sticky=section.querySelector('.thinking-sticky,.edit-sticky,.evidence-shell');
    const start=absolute(section);
    add({y:start,semantic:true});
-   if(section.id==='skills'&&!section.querySelector('.skills-list:not([hidden])')){
-    const panel=section.querySelector('.skills-showcase');
-    const travel=Math.max(0,section.offsetHeight-panel.offsetHeight);
-    const top=parseFloat(getComputedStyle(panel).top)||0;
-    if(top<0)add({y:start});
-    add({y:start-top,semantic:true});add({y:start-top+travel,semantic:true});
-   }else if(section.id==='services'){
-    // Long open service panels remain readable in viewport-sized steps.
-    const end=start+section.offsetHeight;
-    for(let y=start+window.DTViewport.height()*.85;y<end-window.DTViewport.height()-8;y+=window.DTViewport.height()*.85)add({y});
-    if(end-start>window.DTViewport.height()+8)add({y:end-window.DTViewport.height()});
-   }else if(sticky){
+   if(sticky){
     const travel=Math.max(0,section.offsetHeight-sticky.offsetHeight);
     const stickyTop=parseFloat(getComputedStyle(sticky).top)||0;
     // If a short landscape screen cannot contain the content, read its top first.
     if(stickyTop<0)add({y:start});
     for(const fraction of (section.id==='thinking'?[0,.3,.6,1]:[0,.5,1]))add({y:start-stickyTop+travel*fraction,semantic:true});
    }else{
-    add({y:start});
     const end=section.id==='contact'?document.documentElement.scrollHeight:start+section.offsetHeight;
-    // Expanded lists and small landscape screens remain fully reachable.
-    for(let y=start+window.DTViewport.height()*.85;y<end-window.DTViewport.height()-8;y+=window.DTViewport.height()*.85)add({y});
-    if(end-start>window.DTViewport.height()+8)add({y:end-window.DTViewport.height()});
+    // Share overflow evenly: no almost-identical extra landing at the bottom.
+    const distance=Math.max(0,end-start-window.DTViewport.height());
+    if(distance>TOLERANCE){
+     const steps=Math.ceil(distance/(window.DTViewport.height()*.85));
+     for(let i=1;i<=steps;i++)add({y:start+distance*i/steps});
+    }
    }
   }
   const max=Math.max(0,document.documentElement.scrollHeight-window.DTViewport.height());
@@ -62,25 +53,34 @@
  }
  function cancel(){
   if(animation)cancelAnimationFrame(animation);
-  animation=0;animationDirection=0;main.removeAttribute('aria-busy');
+  animation=0;animationDirection=0;animationTarget=null;main.removeAttribute('aria-busy');
  }
  function releaseGesture(){wheelGesture=null;touch=null;cancel();}
  function moveTo(target){
   if(target===null)return;
   cancel();
   target=Math.max(0,Math.min(document.documentElement.scrollHeight-window.DTViewport.height(),target));
-  const from=scrollY,start=performance.now();
+  const from=scrollY,start=performance.now(),duration=Math.min(520,260+Math.abs(target-from)*.18);
   if(Math.abs(target-from)<1)return;
   animationDirection=Math.sign(target-from);
   if(reduced.matches){scrollTo({top:target,behavior:'instant'});animationDirection=0;return;}
+  animationTarget=target;
   main.setAttribute('aria-busy','true');
   function frame(now){
-   const t=Math.min(1,(now-start)/DURATION),ease=t*t*t*(t*(t*6-15)+10);
+   const t=Math.min(1,(now-start)/duration),ease=t*t*t*(t*(t*6-15)+10);
    scrollTo({top:from+(target-from)*ease,behavior:'instant'});
    if(t<1)animation=requestAnimationFrame(frame);
-   else {animation=0;animationDirection=0;main.removeAttribute('aria-busy');}
+   else {animation=0;animationDirection=0;animationTarget=null;main.removeAttribute('aria-busy');}
   }
   animation=requestAnimationFrame(frame);
+ }
+ function advance(direction){
+  measure();
+  // A separate input continues from the requested scene, even during landing.
+  const from=animation&&animationDirection===direction?animationTarget:scrollY;
+  const target=nextTarget(points,from,direction);
+  if(target!==null)moveTo(target);
+  else if(animationDirection!==direction)cancel();
  }
  window.DTScenes={getStops:()=>{measure();return points.map(p=>({...p}));},goTo:target=>{releaseGesture();moveTo(target);}};
  function nestedScroll(target,delta){
@@ -99,18 +99,19 @@
   event.preventDefault();
   const direction=Math.sign(delta),now=performance.now();
   const fresh=!wheelGesture||wheelGesture.direction!==direction||now-wheelGesture.at>QUIET;
-  if(fresh)wheelGesture={direction,at:now,total:0,used:Boolean(animation&&animationDirection===direction)};
+  if(fresh)wheelGesture={direction,at:now,total:0,used:false};
   wheelGesture.at=now;
   if(wheelGesture.used)return;
   wheelGesture.total+=Math.abs(delta)*(event.deltaMode===1?16:event.deltaMode===2?window.DTViewport.height():1);
   if(wheelGesture.total<12)return;
-  wheelGesture.used=true;measure();const target=nextTarget(points,scrollY,direction);cancel();moveTo(target);
+  wheelGesture.used=true;touch=null;advance(direction);
  },{passive:false});
  window.addEventListener('touchstart',event=>{
+  const resume=animationTarget,resumeDirection=animationDirection;
   releaseGesture();
   if(reduced.matches||event.touches.length!==1||main.hidden||document.querySelector('dialog[open]'))return;
   const finger=event.touches[0];
-  touch={x:finger.clientX,y:finger.clientY,origin:scrollY,target:event.target,direction:0,anchor:null,captured:false};
+  touch={x:finger.clientX,y:finger.clientY,origin:scrollY,resume,resumeDirection,target:event.target,direction:0,anchor:null,captured:false};
  },{passive:true});
  window.addEventListener('touchmove',event=>{
   if(!touch)return;
@@ -119,24 +120,29 @@
   if(!touch.captured&&Math.max(Math.abs(dx),Math.abs(dy))<12)return;
   if((!touch.captured&&Math.abs(dx)>=Math.abs(dy))||exempt(touch.target,dy)||event.cancelable===false){releaseGesture();return;}
   event.preventDefault();const direction=Math.sign(dy);
-  if(!touch.captured||direction!==touch.direction){measure();touch.anchor=nextTarget(points,touch.origin,direction);}
+  if(!touch.captured||direction!==touch.direction){
+   measure();const from=touch.resume!==null&&touch.resumeDirection===direction?touch.resume:touch.origin;
+   touch.anchor=nextTarget(points,from,direction);
+   if(touch.anchor===null&&touch.resumeDirection===direction)touch.anchor=touch.resume;
+  }
   touch.captured=true;touch.direction=direction;
   const end=touch.anchor===null?touch.origin:touch.anchor;
   scrollTo({top:Math.max(Math.min(touch.origin,end),Math.min(Math.max(touch.origin,end),touch.origin+dy)),behavior:'instant'});
  },{passive:false});
  window.addEventListener('touchend',()=>{
   const gesture=touch;touch=null;
-  if(gesture&&gesture.captured)moveTo(gesture.anchor);
+  if(gesture)moveTo(gesture.captured?gesture.anchor:gesture.resume);
  },{passive:true});
  window.addEventListener('touchcancel',()=>{const gesture=touch;releaseGesture();if(gesture&&gesture.captured)moveTo(gesture.origin);},{passive:true});
  window.addEventListener('keydown',event=>{
   const keys=['ArrowDown','ArrowUp','PageDown','PageUp',' ','Home','End'];
   if(reduced.matches||event.defaultPrevented||!keys.includes(event.key)||event.ctrlKey||event.metaKey||event.altKey||exempt(event.target,event.key==='ArrowUp'||event.key==='PageUp'?-1:1))return;
   if(event.key===' '&&event.target instanceof Element&&event.target.closest('button,a,[role="tab"]'))return;
-  event.preventDefault();if(event.repeat)return;
-  releaseGesture();measure();
+  event.preventDefault();if(event.repeat&&animation)return;
+  wheelGesture=null;touch=null;
   const direction=['ArrowUp','PageUp'].includes(event.key)||event.key===' '&&event.shiftKey?-1:1;
-  moveTo(event.key==='Home'?0:event.key==='End'?document.documentElement.scrollHeight-window.DTViewport.height():nextTarget(points,scrollY,direction));
+  if(event.key==='Home'||event.key==='End')moveTo(event.key==='Home'?0:document.documentElement.scrollHeight-window.DTViewport.height());
+  else advance(direction);
  });
  // Direct links, scrollbar dragging and nested controls keep their own navigation.
  window.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse')releaseGesture();},{passive:true});

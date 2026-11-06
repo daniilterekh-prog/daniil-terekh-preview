@@ -1,11 +1,11 @@
 # Daniil Terekh — website preview
 
-[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=clarity-v57#home) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=clarity-v57#services) · [Контакт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=clarity-v57#contact)
+[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=scroll-comfort-v58#home) · [Skills](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=scroll-comfort-v58#skills) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=scroll-comfort-v58#services)
 
-Обновлено 6 ноября 2026 по поручению владельца. Source commit `9b4692f002c7ef6db3f20c5b697e47e4ae56ed0a`, сборка `website/site/dist`.
+Обновлено 6 ноября 2026 по поручению владельца. Source commit `d77799c23c2c1e0d000943843af991496657a706`, сборка `website/site/dist`.
 
-Позиционирование на первом экране, пути для проектов и руководящих ролей, case notes вместо заглушек Evidence, контекст и личный вклад в кейсах, адаптивная витрина и нативная прокрутка при reduced motion. Сохранены линза, кубы, все шесть выбранных компаний и видео BARNES.
+Убран повторный стоп на Skills и хвост под серыми карточками. Быстрые последовательные жесты продолжают движение, инерция одного жеста не пропускает сцены. Длинные панели остаются читаемыми; статичные кадры линзы больше не перерисовываются постоянно. Сохранены позиционирование, равные сценарии проекта и руководящей роли, кейсы и видео BARNES.
 
 Фильм запрашивается только после нажатия Play с официального источника https://barn-estate.ru/upload/barnes.mp4. Приватные исходники, материалы аудита и архив в этот репозиторий не копируются.
 
-Предыдущая опубликованная версия: `752533e` в истории Git.
+Предыдущая опубликованная версия: `e4fdbe6` в истории Git.

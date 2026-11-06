@@ -22,6 +22,12 @@
 .contact-intents i{font-style:normal}
 .contact-intents a:hover{border-color:#181916}
 .human-editorial-grid{grid-template-columns:1fr}
+/* Keep the compact closing screen and short landscape biography in one view. */
+@media(max-width:800px){
+ #site-footer{padding-top:12px}
+ #site-footer .footer-grid{padding-block:12px}
+}
+@media(min-width:801px) and (max-height:500px){.human-editorial-grid{padding-block:24px}}
 .proof-sheet-note>em{font-style:normal}
 .proof-note-marker{font:52px/1 ThinkingNarrow,Impact,sans-serif;display:block;margin-top:32px;color:#343434}
 .proof-journey{display:grid;gap:12px;margin-top:24px;font:20px/1.2 ThinkingNarrow,Impact,sans-serif;text-align:left}
