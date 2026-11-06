@@ -424,7 +424,7 @@
     "id": "setevie",
     "name": "SETEVIE",
     "featured": true,
-    "role": "Head of Digital Marketing",
+    "role": "Head of Projects",
     "location": "Saint Petersburg · Multi-project agency",
     "sector": "Marketing agency",
     "tags": "TEAM / STRATEGY / OPERATIONS",
