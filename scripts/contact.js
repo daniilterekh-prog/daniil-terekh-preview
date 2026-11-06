@@ -4,6 +4,7 @@
  if(!dialog)return;
  const closeButton=document.getElementById('connect-close');
  const email=document.getElementById('connect-email');
+ const telegram=document.getElementById('connect-telegram');
  const context=document.getElementById('connect-context');
  const status=document.getElementById('copy-status');
  const address='daniilterekh@gmail.com';
@@ -15,6 +16,9 @@
   if(trigger?.closest('#detailPage'))topic='About '+document.getElementById('detailName').textContent;
   context.textContent=topic;context.hidden=!topic;
   email.href='mailto:'+address+'?subject='+encodeURIComponent(topic||'Let’s connect');
+  const chat=new URL('https://t.me/DANIILTEREKH');
+  chat.searchParams.set('text',topic?'Hi Daniil! I’d like to connect.\n\n'+topic+'\n\n':'Hi Daniil! I’d like to discuss a project or a role with you.');
+  telegram.href=chat.href;
   status.textContent='';
   window.DTScenes?.goTo(scrollY);
   document.documentElement.classList.add('connect-open');

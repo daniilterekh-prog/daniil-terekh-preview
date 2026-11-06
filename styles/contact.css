@@ -18,14 +18,14 @@ html.connect-open,html.connect-open body{overflow:hidden}
 .connect-method small{font-size:10px;line-height:1.4}
 .connect-method:disabled{color:#73756c;border-color:#c5c6bc;cursor:default}
 .connect-method:disabled small{color:#64665e}
-.connect-method-email{background:#1a1b18;border-color:#1a1b18;color:#f4f4ef}
-.connect-method-email:hover{background:#3a3c34;border-color:#3a3c34}
+.connect-method-live{background:#1a1b18;border-color:#1a1b18;color:#f4f4ef}
+.connect-method-live:hover{background:#3a3c34;border-color:#3a3c34}
 .connect-email-address{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 18px;font-size:12px;line-height:1.5}
 .connect-email-address a{color:inherit;text-underline-offset:4px;overflow-wrap:anywhere;min-height:44px;display:inline-flex;align-items:center}
 .connect-email-address button{min-height:44px;padding:10px 0;border:0;background:transparent;color:inherit;text-decoration:underline;text-underline-offset:4px;cursor:pointer;font:inherit}
 .connect-copy-status{font-size:12px;line-height:1.5;margin:0;min-height:18px;color:#51534c}
 .connect-dialog :is(a,button):focus-visible{outline:2px solid currentColor;outline-offset:4px}
-.connect-dialog .connect-method-email:focus-visible{outline-color:#181916}
+.connect-dialog .connect-method-live:focus-visible{outline-color:#181916}
 @media(max-width:590px){
  .connect-dialog{width:calc(100vw - 24px);max-height:calc(100dvh - 24px)}
  .connect-top{padding:8px 16px}

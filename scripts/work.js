@@ -139,6 +139,15 @@ function renderDetail(c){
   ?'BARNES brand film · company context. My role covered digital marketing for the Moscow team.'
   :c.id==='cycle'?'CYCLE · agency presentation.':c.image?.includes('/companies/')?'Current company website · shown for context. My contribution is described below.':'Experience overview · my role and contribution below.';
  const facts=byId('case-facts');facts.replaceChildren();
+ if(c.results?.length){
+  const section=element('section','case-results');section.append(element('h2','','Selected results.'));
+  const list=element('dl','case-result-list');
+  for(const result of c.results){
+   const card=element('div','case-result');
+   card.append(element('dt','',result.label),element('dd','case-result-value',result.value),element('dd','case-result-detail',result.detail));list.append(card);
+  }
+  section.append(list);facts.append(section);
+ }
  for(const [heading,value] of [['The task.',c.challenge],['The approach.',c.approach],['My contribution.',c.contribution],['What took shape.',c.delivered]]){
   const section=element('section');section.append(element('h2','',heading));
   if(Array.isArray(value)){const list=element('ul');value.forEach(v=>list.append(element('li','',v)));section.append(list);}else section.append(element('p','',value));

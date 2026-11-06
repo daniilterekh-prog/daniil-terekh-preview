@@ -170,12 +170,31 @@
       "Landing pages for new property launches",
       "Email, WhatsApp and Telegram communication flows",
       "Marketing–sales coordination and analytics",
+      "AI call analysis and lead-handling reports for the sales team",
       "Content partnerships and client club initiatives"
     ],
     "delivered": [
       "Launch funnels connecting ads, pages and follow-up",
       "Reactivation flows for existing contacts",
-      "A more structured content and reporting process"
+      "A more structured content and reporting process",
+      "Faster call reviews for the head of sales"
+    ],
+    "results": [
+      {
+        "value": "−37%",
+        "label": "Cost per lead",
+        "detail": "1.5× the lead volume at the same advertising budget."
+      },
+      {
+        "value": "+25%",
+        "label": "Share of repeat enquiries",
+        "detail": "After introducing CRM journeys across email and messengers."
+      },
+      {
+        "value": "15%",
+        "label": "Lost leads reactivated",
+        "detail": "Recovered through CRM follow-up."
+      }
     ],
     "collaboration": "Worked with SMM, design, video production and sales. Contributed to collaborations with developers and design studios.",
     "logo": "assets/companies/mk-elit-logo.svg",
@@ -428,6 +447,18 @@
       "A shared process for media plan reviews",
       "Clearer responsibilities across channels",
       "Reporting connecting specialists and stakeholders"
+    ],
+    "results": [
+      {
+        "value": ">50%",
+        "label": "Reduction in cost per lead",
+        "detail": "CPL more than halved through campaign optimisation."
+      },
+      {
+        "value": "Up to 500%",
+        "label": "Return on marketing investment",
+        "detail": "ROMI achieved through campaign optimisation."
+      }
     ],
     "collaboration": "Led a multidisciplinary digital team and coordinated delivery with clients and project stakeholders.",
     "logo": "assets/companies/setevie-logo.svg",
