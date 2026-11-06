@@ -29,7 +29,7 @@
   if(main.hidden)return;
   const height=shell.offsetHeight;
   root.style.minHeight=(height+Math.max(420,Math.round(window.DTViewport.height()*.85)))+'px';
-  shell.style.top=Math.min(0,window.DTViewport.height()-height)+'px';
+  shell.style.top=((window.DTViewport.top?.()||0)+Math.min(0,(window.DTViewport.contentHeight?.()||window.DTViewport.height())-height))+'px';
   if(pendingSelection){
    const target=stageTarget(pendingSelection.index);
    if(Math.abs(target-pendingSelection.target)>2){pendingSelection.target=target;moveStage(target);}

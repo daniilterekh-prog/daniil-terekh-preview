@@ -241,7 +241,7 @@
  }
  function scrollState(){
   const travel=Math.max(1,section.offsetHeight-sticky.offsetHeight);
-  progress=Math.max(0,Math.min(1,-section.getBoundingClientRect().top/travel));
+  progress=Math.max(0,Math.min(1,((window.DTViewport.top?.()||0)-section.getBoundingClientRect().top)/travel));
   if(media.matches)progress=[0,.3,.6,1][Math.min(3,Math.floor(progress*4))];
   state=model.flightState(progress);
  }
@@ -251,7 +251,7 @@
  }
  function measureThinking(){
   if(main.hidden)return;
-  section.style.minHeight=(sticky.offsetHeight+Math.round(window.DTViewport.height()*2.2))+'px';sticky.style.top='0px';resizeMorph();requestScrollState();
+  section.style.minHeight=(sticky.offsetHeight+Math.round(window.DTViewport.height()*2.2))+'px';sticky.style.top=(window.DTViewport.top?.()||0)+'px';resizeMorph();requestScrollState();
  }
  new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;syncMotion();}).observe(section);
  new ResizeObserver(measureThinking).observe(sticky);
@@ -302,7 +302,7 @@
   if(main.hidden)return;
   const height=editSticky.offsetHeight;
   edit.style.minHeight=(height+Math.max(420,Math.round(window.DTViewport.height()*.85)))+'px';
-  editSticky.style.top=Math.min(0,window.DTViewport.height()-height)+'px';
+  editSticky.style.top=((window.DTViewport.top?.()||0)+Math.min(0,(window.DTViewport.contentHeight?.()||window.DTViewport.height())-height))+'px';
   if(pendingEdit){
    const {top,travel}=editProgress();
    const target=scrollY+edit.getBoundingClientRect().top-top+travel*pendingEdit.index/2;

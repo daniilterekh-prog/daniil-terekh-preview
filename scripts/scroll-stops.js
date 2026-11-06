@@ -9,10 +9,11 @@
  const main=document.getElementById('mainPage');if(!main)return;
  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
  let points=[],animation=0,animationDirection=0,animationTarget=null,wheelGesture=null,touch=null;
- let measuredWidth=0,measuredHeight=0;
+ let measuredWidth=0,measuredHeight=0,measuredHeader=0;
  const absolute=e=>e.getBoundingClientRect().top+scrollY;
  function measure(){
   if(main.hidden)return;
+  const header=window.DTViewport.top?.()||0,viewport=window.DTViewport.contentHeight?.()||window.DTViewport.height();
   const all=[{id:"hero",y:0,semantic:true}];
   for(const section of main.children){
    if(!section.matches('section,footer'))continue;
@@ -20,7 +21,11 @@
    if(section.id==='hero'){
     add({y:0,semantic:true});
     const content=Array.from(section.querySelectorAll('.hero-name,.signature'));
-    if(content.length){const end=Math.max(...content.map(el=>absolute(el)+el.offsetHeight))+24-window.DTViewport.height();if(end>TOLERANCE)add({y:end,semantic:true});}
+    if(content.length){
+     const bottom=Math.max(...content.map(el=>el.getBoundingClientRect().bottom+scrollY));
+     // Add a reading stop only for clipped content, not a few pixels of margin.
+     if(bottom>window.DTViewport.height()+TOLERANCE)add({y:Math.ceil(bottom+24-window.DTViewport.height()),semantic:true});
+    }
     continue;
    }
    if(section.id==='work'){
@@ -30,20 +35,20 @@
    if(section.id==='site-footer'){add({y:absolute(section),semantic:true});continue;}
    const sticky=section.querySelector('.thinking-sticky,.edit-sticky,.evidence-shell');
    const start=absolute(section);
-   add({y:start,semantic:true});
+   add({y:start-header,semantic:true});
    if(sticky){
     const travel=Math.max(0,section.offsetHeight-sticky.offsetHeight);
     const stickyTop=parseFloat(getComputedStyle(sticky).top)||0;
     // If a short landscape screen cannot contain the content, read its top first.
-    if(stickyTop<0)add({y:start});
+    if(stickyTop<header)add({y:start-header});
     for(const fraction of (section.id==='thinking'?[0,.3,.6,1]:[0,.5,1]))add({y:start-stickyTop+travel*fraction,semantic:true});
    }else{
     const end=section.id==='contact'?document.documentElement.scrollHeight:start+section.offsetHeight;
     // Share overflow evenly: no almost-identical extra landing at the bottom.
-    const distance=Math.max(0,end-start-window.DTViewport.height());
+    const distance=Math.max(0,end-start-viewport);
     if(distance>TOLERANCE){
-     const steps=Math.ceil(distance/(window.DTViewport.height()*.85));
-     for(let i=1;i<=steps;i++)add({y:start+distance*i/steps});
+     const steps=Math.ceil(distance/(viewport*.85));
+     for(let i=1;i<=steps;i++)add({y:start-header+distance*i/steps});
     }
    }
   }
@@ -91,7 +96,7 @@
   }
   return false;
  }
- function exempt(target,delta){return main.hidden||document.querySelector('dialog[open]')||
+ function exempt(target,delta){return main.hidden||document.querySelector('dialog[open],.site-header[data-menu-open="true"]')||
   target instanceof Element&&(target.closest('input,textarea,select,[contenteditable="true"]')||nestedScroll(target,delta));}
  window.addEventListener('wheel',event=>{
   const delta=event.deltaY;
@@ -109,7 +114,7 @@
  window.addEventListener('touchstart',event=>{
   const resume=animationTarget,resumeDirection=animationDirection;
   releaseGesture();
-  if(reduced.matches||event.touches.length!==1||main.hidden||document.querySelector('dialog[open]'))return;
+  if(reduced.matches||event.touches.length!==1||main.hidden||document.querySelector('dialog[open],.site-header[data-menu-open="true"]'))return;
   const finger=event.touches[0];
   touch={x:finger.clientX,y:finger.clientY,origin:scrollY,resume,resumeDirection,target:event.target,direction:0,anchor:null,captured:false};
  },{passive:true});
@@ -151,10 +156,10 @@
  reduced.addEventListener('change',releaseGesture);
  new MutationObserver(()=>{if(main.hidden)releaseGesture();}).observe(main,{attributes:true,attributeFilter:['hidden']});
  function resize(){
-  const height=window.DTViewport.height();
-  if(measuredWidth===innerWidth&&measuredHeight===height)return;
-  measuredWidth=innerWidth;measuredHeight=height;
-  releaseGesture();document.documentElement.style.setProperty('--scene-height',height+'px');
+  const height=window.DTViewport.height(),header=window.DTViewport.top?.()||0;
+  if(measuredWidth===innerWidth&&measuredHeight===height&&measuredHeader===header)return;
+  measuredWidth=innerWidth;measuredHeight=height;measuredHeader=header;
+  releaseGesture();document.documentElement.style.setProperty('--scene-height',(height-header)+'px');
   document.documentElement.style.setProperty('--footer-height',document.getElementById('site-footer').offsetHeight+'px');measure();
  }
  window.addEventListener('resize',resize,{passive:true});

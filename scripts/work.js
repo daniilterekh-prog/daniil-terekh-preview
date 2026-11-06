@@ -36,7 +36,7 @@ function measureStory(){
  document.documentElement.style.setProperty('--lab-h',labH+'px');
  const realMobile=window.innerWidth<=720, simulated=false, mobile=realMobile||simulated;
  document.documentElement.classList.toggle('mobile-actual',realMobile);
- const stageH=window.DTViewport.height();
+ const stageH=window.DTViewport.contentHeight?.()||window.DTViewport.height();
  document.documentElement.style.setProperty('--stage-h',stageH+'px');
  const introDist=Math.round(stageH*(mobile?.35:.50)); const slideDist=Math.round(stageH*.65); const outroDist=Math.round(stageH*(mobile?.12:.20));
  section.style.height=(stageH+introDist+Math.max(0,companies.length-1)*slideDist+outroDist)+'px';
@@ -194,7 +194,6 @@ byId('storyNext').addEventListener('click',()=>goToProject(active+1));
 byId('allBtn').addEventListener('click',event=>{if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;lastRouteScroll=scrollY;lastRouteFocus=document.activeElement;detailReturn='work';});
 byId('backBtn').addEventListener('click',()=>{window.location.hash=detailReturn==='all'?'#experience/all':'#work'});
 byId('backAllBtn').addEventListener('click',()=>{window.location.hash='#work'});
-byId('siteWorkLink').addEventListener('click',e=>{if(e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;e.preventDefault();if(byId('mainPage').hidden){location.hash='#work';}else goToProject(0)});
 window.addEventListener('hashchange',applyRoute);
 window.addEventListener('scroll',schedulePaint,{passive:true});
 window.addEventListener('resize',()=>{measureStory();schedulePaint()},{passive:true});

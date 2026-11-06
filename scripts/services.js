@@ -10,7 +10,7 @@
   buttons.forEach(button=>{const active=button.dataset.service===key;button.classList.toggle('is-active',active);button.setAttribute('aria-expanded',String(active));});
   panels.forEach(panel=>{panel.hidden=panel.id!=='service-panel-'+key;});
   close.hidden=key===null;
-  if(window.DTScenes)window.DTScenes.goTo(section.getBoundingClientRect().top+scrollY);
+  if(window.DTScenes)window.DTScenes.goTo(section.getBoundingClientRect().top+scrollY-(window.DTViewport.top?.()||0));
   if(key==='team')close.focus({preventScroll:true});
   else if(restoreFocus)buttons.find(b=>b.dataset.service===key)?.focus({preventScroll:true});
  }
