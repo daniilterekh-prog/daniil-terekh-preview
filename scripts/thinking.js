@@ -11,8 +11,8 @@
  const morph=document.createElement('canvas');morph.className='signal-morph';morph.setAttribute('aria-hidden','true');visual.append(morph);
  const context=morph.getContext('2d');
  const sources=[original[3],original[1],original[18]],goals=['ATTRACT QUALIFIED CLIENTS.','FIX THE JOURNEY FIRST.','TEST. MEASURE. SCALE.'];
- let visible=false,scrollDirty=true,sceneFrame=0,lastTime=0,clock=0,progress=0,state=model.flightState(0),width=0,height=0;
- function resizeMorph(){glyphMetrics.clear();const r=visual.getBoundingClientRect();width=r.width;height=r.height;const dpr=Math.min(devicePixelRatio||1,1.5);morph.width=Math.round(width*dpr);morph.height=Math.round(height*dpr);if(context)context.setTransform(dpr,0,0,dpr,0,0);paint();}
+ let visible=false,scrollDirty=true,sceneFrame=0,lastTime=0,clock=0,progress=0,state=model.flightState(0),width=0,height=0,targets=[];
+ function resizeMorph(){glyphMetrics.clear();const r=visual.getBoundingClientRect();width=r.width;height=r.height;const dpr=Math.min(devicePixelRatio||1,2,Math.max(1,Math.sqrt(8000000/(width*height))));morph.width=Math.round(width*dpr);morph.height=Math.round(height*dpr);if(context){context.setTransform(dpr,0,0,dpr,0,0);layoutClarity();}paint();}
  const glyphMetrics=new Map();
  function textMetrics(text,font){
   const key=font+"\n"+text;
@@ -22,18 +22,33 @@
   }
   return glyphMetrics.get(key);
  }
- function textPositions(text,font,y){
-  const metrics=textMetrics(text,font),start=(width-metrics.width)/2;
+ function textPositions(text,font,y,center=width*.5){
+  const metrics=textMetrics(text,font),start=center-metrics.width/2;
   return Array.from(text).map((char,i)=>({char,x:start+metrics.offsets[i],y}));
+ }
+ function layoutClarity(){
+  if(!width||!height)return;
+  const lens=model.glassGeometry(width,height,1),cap=Math.min(width<=600?32:68,width*.085);
+  const rows=goals.map((text,index)=>{
+   const size=cap*(index===0?1:.72);context.font='700 '+size+'px ThinkingNarrow';const m=context.measureText(text);
+   return {size,y:height*(.4+index*.17),width:m.width,ascent:m.fontBoundingBoxAscent||size*1.18,descent:m.fontBoundingBoxDescent||size*.32};
+  });
+  // Fit the complete font box to the final glass, leaving a small optical margin.
+  const fits=scale=>rows.every(r=>{
+   const top=r.y-(r.size+r.ascent+r.descent)*scale/2,bottom=top+(r.ascent+r.descent)*scale;
+   const vertical=Math.max(Math.abs(top-lens.cy),Math.abs(bottom-lens.cy));
+   return r.width*scale<=width*.88&&(r.width*scale/(2*lens.rx))**2+(vertical/lens.ry)**2<=.9;
+  });
+  let scale=1;
+  if(!fits(1)){let low=0,high=1;for(let i=0;i<12;i++){const mid=(low+high)/2;if(fits(mid))low=mid;else high=mid;}scale=low;}
+  targets=rows.map(r=>({size:r.size*scale,baseline:r.y+(r.ascent-r.descent-r.size)*scale/2,center:lens.cx}));
+  clarity.style.setProperty('--clarity-main-size',targets[0].size+'px');
+  clarity.style.setProperty('--clarity-small-size',targets[1].size+'px');
  }
  function ellipse(ctx,x,y,rx,ry){ctx.beginPath();ctx.ellipse(x,y,Math.max(1,rx),Math.max(1,ry),0,0,Math.PI*2);}
  function drawGlass(){
-  const ctx=context,p=progress,turn=model.smooth(.08,.42,p),cross=model.smooth(.38,.7,p),retreat=model.smooth(.73,1,p);
-  const zoom=1+cross*5.5-retreat*5.35;
-  const cx=width*(.51+Math.sin(p*Math.PI)*.04),cy=height*.55;
-  const ry=Math.min(height*.31,width<600?height*.27:width*.3)*zoom;
-  const rx=ry*(.24+turn*.69),depth=Math.min(width*.025,27)*(1-turn*.7)*zoom;
-  ctx.save();ctx.globalAlpha=1-retreat*.87;
+  const ctx=context,{cx,cy,rx,ry,depth,zoom,retreat}=model.glassGeometry(width,height,progress);
+  ctx.save();ctx.globalAlpha=1-retreat*.87;ctx.lineJoin='round';ctx.lineCap='round';
   // A broad caustic and a cut glass edge retain volume at every camera angle.
   const aura=ctx.createRadialGradient(cx,cy,0,cx,cy,ry*1.3);
   aura.addColorStop(0,'#c8d0ce10');aura.addColorStop(.6,'#c8d0ce05');aura.addColorStop(1,'#c8d0ce00');
@@ -44,13 +59,12 @@
   const glass=ctx.createLinearGradient(cx-rx,cy,cx+rx,cy);
   [[0,'#dce7e23d'],[.08,'#a8b9b126'],[.28,'#151d1b75'],[.64,'#dce6e60c'],[.88,'#dce6e630'],[1,'#f3f7f45c']].forEach(([n,c])=>glass.addColorStop(n,c));
   ellipse(ctx,cx,cy,rx,ry);ctx.fillStyle=glass;ctx.fill();ctx.strokeStyle=edge;ctx.lineWidth=1.7;ctx.stroke();
-  // Fine concentric bevels are lit unevenly, like polished optical glass.
-  for(let i=1;i<7;i++){ellipse(ctx,cx+depth*.12,cy,rx-i*1.1,ry-i*1.25);ctx.strokeStyle='rgba(219,231,226,'+(.12-i*.014)+')';ctx.lineWidth=.65;ctx.stroke();}
+  // Two soft bevels keep the edge clean when the camera approaches the glass.
+  for(let i=1;i<=2;i++){const inset=i*1.4*Math.sqrt(zoom);ellipse(ctx,cx+depth*.12,cy,rx-inset,ry-inset);ctx.strokeStyle='rgba(219,231,226,'+(.12-i*.035)+')';ctx.lineWidth=.8;ctx.stroke();}
   ctx.save();ellipse(ctx,cx,cy,rx-2,ry-2);ctx.clip();
   const reflection=ctx.createLinearGradient(cx-rx,cy-ry,cx+rx,cy+ry);
-  reflection.addColorStop(0,'#ffffff00');reflection.addColorStop(.25,'#ffffff05');reflection.addColorStop(.32,'#edf6f345');reflection.addColorStop(.38,'#ffffff02');reflection.addColorStop(1,'#ffffff00');
+  reflection.addColorStop(0,'#ffffff00');reflection.addColorStop(.18,'#ffffff03');reflection.addColorStop(.42,'#edf6f32b');reflection.addColorStop(.7,'#ffffff03');reflection.addColorStop(1,'#ffffff00');
   ctx.fillStyle=reflection;ctx.fillRect(cx-rx,cy-ry,rx*2,ry*2);
-  for(let i=0;i<9;i++){ctx.beginPath();ctx.moveTo(cx-rx,cy+(i-4)*ry*.16);ctx.bezierCurveTo(cx-rx*.2,cy+(i-4)*ry*.06,cx+rx*.35,cy+(i-4)*ry*.27,cx+rx,cy+(i-4)*ry*.11);ctx.strokeStyle='#dce5e516';ctx.lineWidth=.7;ctx.stroke();}
   ctx.restore();
   ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,Math.PI*.96,Math.PI*1.53);ctx.strokeStyle='#eef5f0bd';ctx.lineWidth=1.6;ctx.shadowColor='#e4efe8';ctx.shadowBlur=9;ctx.stroke();
   ctx.restore();
@@ -91,13 +105,13 @@
   ctx.globalAlpha=1;
   if(state.focus<.001)return;
   const sourceSize=Math.min(width<600?23:36,width*.06);
-  const targetSize=Math.min(width<600?32:68,width*.085);
+  const targetSize=targets[0]?.size||Math.min(width<600?32:68,width*.085);
   const split=model.smooth(.38,.58,progress),assemble=model.smooth(.65,.92,progress);
   for(let g=0;g<3;g++){
    context.font=sourceSize+'px Georgia';const fitted=sourceSize*Math.min(1,width*.88/textMetrics(sources[g],sourceSize+'px Georgia').width);
    const sourceFont=fitted+'px Georgia',targetFont='700 '+(g===0?targetSize:targetSize*.72)+'px ThinkingNarrow';
    const src=textPositions(sources[g],sourceFont,height*(.34+g*.17));
-   const dst=textPositions(goals[g],targetFont,height*(.36+g*.17));
+   const dst=textPositions(goals[g],targetFont,targets[g]?.baseline||height*(.4+g*.17),targets[g]?.center||width*.51);
    const n=Math.max(src.length,dst.length);
    for(let i=0;i<n;i++){
     const a=src[i]||{char:'',x:width*.5,y:height*.51},b=dst[i]||{char:'',x:width*.5,y:height*.51};

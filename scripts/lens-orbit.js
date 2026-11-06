@@ -14,6 +14,11 @@
   const dissolved=smooth(start,start+.06,phase);
   return {opacity:1-dissolved,dust:Math.sin(dissolved*Math.PI)};
  }
- const api={flightState,flowState,phraseGlyphState,smooth};
+ function glassGeometry(width,height,value){
+  const p=clamp(value),turn=smooth(.08,.42,p),cross=smooth(.38,.7,p),retreat=smooth(.73,1,p);
+  const zoom=1+cross*5.5-retreat*5.35,ry=Math.min(height*.31,width<600?height*.27:width*.3)*zoom;
+  return {cx:width*(.51+Math.sin(p*Math.PI)*.04),cy:height*.55,ry,rx:ry*(.24+turn*.69),depth:Math.min(width*.025,27)*(1-turn*.7)*zoom,zoom,retreat};
+ }
+ const api={flightState,flowState,phraseGlyphState,glassGeometry,smooth};
  if(typeof module==='object'&&module.exports)module.exports=api;else root.DTLensOrbit=api;
 })(globalThis);
