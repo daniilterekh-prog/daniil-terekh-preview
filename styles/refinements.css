@@ -905,14 +905,18 @@ html { scroll-behavior:auto!important;scroll-padding-top:0; }
 /* A keyboard entry point without changing the resting composition. */
 .skip-link { position:fixed;top:12px;left:12px;z-index:1000;padding:12px 18px;background:#fff;color:#111;transform:translateY(-160%); }
 .skip-link:focus { transform:translateY(0); }
-.case-film { max-width:1100px;margin:48px 0 40px; }
-.case-film-heading { display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin-bottom:18px; }
-.case-film-heading h2 { margin:0;font:400 clamp(30px,4vw,52px)/1 ThinkingNarrow,Impact,sans-serif;letter-spacing:-.015em; }
+.detail[data-case="barnes"] h1 { margin-top:48px; }
+#detailName:focus { outline:none; }
+.detail[data-case="barnes"] .detail-meta { margin-bottom:28px; }
+.case-film { width:100%;margin:0 0 40px; }
+.case-film-heading { display:flex;justify-content:flex-end;margin-bottom:12px; }
 .case-film-heading p { margin:0;color:#c3c3bc;font:12px/1.4 var(--sans);white-space:nowrap; }
-.case-film-player { position:relative;aspect-ratio:16/9;background:#000;border:1px solid #555; }
-.case-film-player video { position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain; }
+/* The original film has a cinematic picture inside a 16:9 file. */
+.case-film-player { position:relative;aspect-ratio:21/9;background:#000; }
+.case-film-player video { position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover; }
+.case-film-player video:fullscreen { object-fit:contain; }
 .case-film-start { position:absolute;inset:0;display:block;width:100%;height:100%;padding:0;border:0;background:#000;color:#fff;cursor:pointer; }
-.case-film-start>img { display:block;width:100%;height:100%;object-fit:contain; }
+.case-film-start>img { display:block;width:100%;height:100%;object-fit:cover; }
 .case-film-play { position:absolute;left:28px;bottom:24px;display:flex;align-items:center;gap:14px;font:600 12px/1.4 var(--sans);letter-spacing:.08em;text-shadow:0 1px 6px #000; }
 .case-film-play svg { width:44px;height:44px;padding:12px;border:1px solid #fff;border-radius:50%;background:#080909b3; }
 .case-film-start:hover .case-film-play svg { background:#fff;color:#111; }
@@ -921,8 +925,9 @@ html { scroll-behavior:auto!important;scroll-padding-top:0; }
 .case-film-status:empty { display:none; }
 .case-film-original { display:inline-flex;align-items:center;min-height:44px;margin-top:8px;color:#f4f3ed;text-decoration:underline;text-underline-offset:5px; }
 @media(max-width:720px) {
- .case-film { margin-block:32px; }
- .case-film-heading { flex-wrap:wrap;gap:10px; }
+ .case-film { margin-bottom:32px; }
+ .case-film-player { aspect-ratio:16/9; }
+ .case-film-player video,.case-film-start>img { object-fit:contain; }
  .case-film-play { left:16px;bottom:14px;font-size:11px;gap:10px; }
 }
 @media(max-width:800px) {

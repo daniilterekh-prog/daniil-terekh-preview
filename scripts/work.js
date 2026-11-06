@@ -120,6 +120,7 @@ function applyRoute(){
   const id=hash.slice('#experience/'.length),c=companies.find(x=>x.id===id);
   if(!c){history.replaceState(null,'',window.location.pathname+window.location.search);return applyRoute()}
   main.hidden=true;detail.hidden=false;detail.classList.add('is-open');byId('detailName').textContent=c.name;byId('detailRole').textContent=c.role;
+  detail.dataset.case=c.id;byId('detailVisual').hidden=c.id==='barnes';
   byId('detailImage').src=c.image;byId('detailImage').alt=c.name+' — visual concept';
   byId('detailDesc').textContent=caseContent[c.id].intro;
   byId('case-facts').replaceChildren(...caseContent[c.id].facts.map(([label,copy])=>{const item=document.createElement('section'),h=document.createElement('h2'),p=document.createElement('p');h.textContent=label;p.textContent=copy;item.append(h,p);return item;}));
