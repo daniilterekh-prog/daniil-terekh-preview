@@ -2,7 +2,7 @@
  'use strict';
  const section=document.getElementById('thinking'),visual=document.getElementById('signal-visual');
  if(!section||!visual)return;
- const viewport=document.getElementById('site'),main=document.getElementById('mainPage');
+ const main=document.getElementById('mainPage');
  const media=window.matchMedia('(prefers-reduced-motion: reduce)');
  visual.dataset.renderer='canvas';
  const sticky=section.querySelector('.thinking-sticky'),noise=section.querySelector('.signal-noise'),clarity=section.querySelector('.signal-clarity');
@@ -12,7 +12,6 @@
  const context=morph.getContext('2d');
  const sources=[original[3],original[1],original[18]],goals=['ATTRACT QUALIFIED CLIENTS.','FIX THE JOURNEY FIRST.','TEST. MEASURE. SCALE.'];
  let visible=false,scrollDirty=true,sceneFrame=0,lastTime=0,clock=0,progress=0,state=model.flightState(0),width=0,height=0;
- function motionReduced(){return media.matches;}
  function resizeMorph(){glyphMetrics.clear();const r=visual.getBoundingClientRect();width=r.width;height=r.height;const dpr=Math.min(devicePixelRatio||1,1.5);morph.width=Math.round(width*dpr);morph.height=Math.round(height*dpr);if(context)context.setTransform(dpr,0,0,dpr,0,0);paint();}
  const glyphMetrics=new Map();
  function textMetrics(text,font){
@@ -213,7 +212,7 @@
  ];
  const editControls=Array.from(edit.querySelectorAll('[data-edit-stage]'));
  const editSticky=edit.querySelector('.edit-sticky');
- let editSelected=-1,editQueued=0;
+ let editSelected=-1,editQueued=0,pendingEdit=null;
  function setEdit(index){
   if(index===editSelected)return;
   editSelected=index;edit.dataset.edit=String(index);
@@ -236,6 +235,10 @@
  }
  function paintEditScroll(){
   editQueued=0;if(main.hidden)return;
+  if(pendingEdit){
+   if(Math.abs(scrollY-pendingEdit.target)>2)return;
+   pendingEdit=null;
+  }
   const {progress}=editProgress();
   setEdit(Math.min(2,Math.floor(progress*3)));
  }
@@ -245,18 +248,30 @@
   const height=editSticky.offsetHeight;
   edit.style.minHeight=(height+Math.max(420,Math.round(window.DTViewport.height()*.85)))+'px';
   editSticky.style.top=Math.min(0,window.DTViewport.height()-height)+'px';
+  if(pendingEdit){
+   const {top,travel}=editProgress();
+   const target=scrollY+edit.getBoundingClientRect().top-top+travel*pendingEdit.index/2;
+   if(Math.abs(target-pendingEdit.target)>2){pendingEdit.target=target;if(window.DTScenes)window.DTScenes.goTo(target);}
+  }
   queueEditScroll();
  }
  function goEditStage(index){
+  setEdit(index);
   const {top,travel}=editProgress();
   const target=window.scrollY+edit.getBoundingClientRect().top-top+travel*index/2;
+  pendingEdit={index,target};
   if(window.DTScenes)window.DTScenes.goTo(target);else window.scrollTo({top:target,behavior:'instant'});
  }
+ function resumeEditScroll(){pendingEdit=null;queueEditScroll();}
+ window.addEventListener('wheel',event=>{if(!event.ctrlKey&&!event.metaKey)resumeEditScroll();},{passive:true});
+ window.addEventListener('touchstart',resumeEditScroll,{passive:true});
+ window.addEventListener('keydown',event=>{if(!event.defaultPrevented&&['ArrowDown','ArrowUp','PageDown','PageUp',' ','Home','End'].includes(event.key))resumeEditScroll();});
+ window.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse'&&event.clientX>=document.documentElement.clientWidth)resumeEditScroll();},{passive:true});
  window.addEventListener('scroll',queueEditScroll,{passive:true});
  window.addEventListener('resize',measureEditScroll,{passive:true});
- window.addEventListener('hashchange',measureEditScroll);
+ window.addEventListener('hashchange',()=>{pendingEdit=null;measureEditScroll();});
  new ResizeObserver(measureEditScroll).observe(editSticky);
- new MutationObserver(measureEditScroll).observe(main,{attributes:true,attributeFilter:['hidden']});
+ new MutationObserver(()=>{pendingEdit=null;measureEditScroll();}).observe(main,{attributes:true,attributeFilter:['hidden']});
  setEdit(0);measureEditScroll();
  if(document.fonts)document.fonts.ready.then(measureEditScroll);
  document.getElementById('thinking-jump')?.addEventListener('click',()=>{

@@ -13,8 +13,7 @@ const caseContent={
 const byId=id=>document.getElementById(id);
 const site=byId('site'), section=byId('work'), sticky=byId('storySticky'), frame=byId('storyFrame'), track=byId('storyScreens'), phoneTrack=byId('storyPhoneScreens');
 let lastPaintLocal=null;
-let active=0, metrics=null, lastRouteScroll=0, animRaf=0, changingMeta=false;
-let reduced=Boolean(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches);
+let active=0, metrics=null, lastRouteScroll=0, lastRouteFocus=null, animRaf=0;
 const clamp=(n,a=0,b=1)=>Math.max(a,Math.min(b,n));
 const smooth=t=>t*t*(3-2*t);
 const lerp=(a,b,t)=>a+(b-a)*t;
@@ -22,13 +21,12 @@ function renderScreens(){
  track.replaceChildren();phoneTrack.replaceChildren();
  companies.forEach((c,i)=>{
   const layer=document.createElement('div');layer.className='story-layer';layer.dataset.index=String(i);layer.style.zIndex=i+1;
-  const img=document.createElement('img');img.src=c.image;img.alt=c.name+(c.concept?' — visual concept':' — website screenshot');img.loading=i<2?'eager':'lazy';img.decoding='async';
+  const img=document.createElement('img');img.src=c.image;img.alt=c.name+(c.concept?' — visual concept':' — website screenshot');img.width=1440;img.height=900;img.loading=i<2?'eager':'lazy';img.decoding='async';
   layer.append(img);track.append(layer);
   const phoneLayer=layer.cloneNode(true);phoneLayer.querySelector('img').alt='';phoneTrack.append(phoneLayer);
  });
  requestAnimationFrame(()=>{measureStory();paintStory()});
 }
-function setHero(id){byId('hero').className='hero hero--v'+id;site.classList.toggle('ref-mode',String(id)==='0');byId('heroName').innerHTML=id==='6'?'<span>Daniil</span><span>Terekh</span>':'<span>DANIIL</span><span>TEREKH</span>';requestAnimationFrame(()=>{measureStory();paintStory()});}
 function measureStory(){
  if(byId('mainPage').hidden)return;
  const labH=0;
@@ -71,9 +69,11 @@ function paintStory(){
  byId('storyCaption').style.pointerEvents=metaOpacity>.85?'auto':'none';
  byId('storyControls').style.opacity=metaOpacity;
  byId('storyControls').style.pointerEvents=metaOpacity>.85?'auto':'none';
+ byId('storyCaption').inert=metaOpacity<=.85;byId('storyControls').inert=metaOpacity<=.85;
+ frame.tabIndex=metaOpacity>.85?0:-1;
  byId('storyAmbient').style.opacity=clamp((enter-.15)/.65)*.93;
  // All images enter from the BOTTOM, one after another. Scrolling up reverses the motion.
- const layers=track.children;let activeIndex=0,slideFraction=0;
+ const layers=track.children;let activeIndex=0;
  for(let i=0;i<layers.length;i++){
   let reveal=i===0?1:smooth(clamp((local-m.introDist-(i-1)*m.slideDist)/m.slideDist));
   let next=i<layers.length-1?smooth(clamp((local-m.introDist-i*m.slideDist)/m.slideDist)):0;
@@ -83,10 +83,8 @@ function paintStory(){
   phoneTrack.children[i].style.transform=layers[i].style.transform;
   phoneTrack.children[i].style.visibility=layers[i].style.visibility;
   if(i>0&&reveal>=.5)activeIndex=i;
-  if(i>0&&reveal>0&&reveal<1)slideFraction=reveal;
  }
  if(activeIndex!==active)setActive(activeIndex);
- const approx=clamp((local-m.introDist)/Math.max(1,(companies.length-1)*m.slideDist));
  byId('storyTrackProgress').style.width=Math.max(2,100*(activeIndex+1)/companies.length)+'%';
  byId('storyPrev').disabled=activeIndex===0;
  byId('storyNext').disabled=activeIndex>=companies.length-1;
@@ -97,8 +95,8 @@ function setActive(i){
  byId('storyName').textContent=c.name;byId('storyRole').textContent=c.role;byId('heroRefCompany').textContent=c.name;byId('heroRefCount').textContent=String(i+1).padStart(2,'0');
  byId('storyTags').textContent=c.tags;byId('storySummary').textContent=caseContent[c.id].summary;
  byId('storyIndex').textContent=String(i+1).padStart(2,'0');
- frame.setAttribute('aria-label','Read about '+c.name);
- byId('storyCase').setAttribute('aria-label','Read about '+c.name);
+ frame.setAttribute('aria-label','Read about '+c.name);frame.href='#experience/'+encodeURIComponent(c.id);
+ byId('storyCase').setAttribute('aria-label','Open case: '+c.name);
 }
 function schedulePaint(){if(animRaf)return;animRaf=requestAnimationFrame(()=>{animRaf=0;paintStory()});}
 function goToProject(index){
@@ -108,25 +106,27 @@ function goToProject(index){
  const y=m.start+offset;
  if(window.DTScenes)window.DTScenes.goTo(y);else window.scrollTo({top:Math.max(0,y),behavior:'instant'});
 }
-function goDetail(id){lastRouteScroll=window.scrollY;window.location.hash='#experience/'+encodeURIComponent(id)}
+function goDetail(id){lastRouteScroll=window.scrollY;lastRouteFocus=document.activeElement;window.location.hash='#experience/'+encodeURIComponent(id)}
 function applyRoute(){
- const hash=decodeURIComponent(window.location.hash||'');
+ let hash=window.location.hash||'';
+ try{hash=decodeURIComponent(hash);}catch{history.replaceState(null,'',window.location.pathname+window.location.search);hash='';}
  const main=byId('mainPage'),detail=byId('detailPage'),all=byId('allPage');
  const prevMainHidden=main.hidden;
- main.hidden=false;detail.classList.remove('is-open');all.classList.remove('is-open');
+ window.DTCaseFilm?.show(hash==='#experience/barnes'?'barnes':null);
+ main.hidden=false;detail.hidden=true;all.hidden=true;detail.classList.remove('is-open');all.classList.remove('is-open');
  if(hash==='#experience/all'){
-  main.hidden=true;all.classList.add('is-open');renderAll();window.scrollTo(0,0);
+  main.hidden=true;all.hidden=false;all.classList.add('is-open');renderAll();window.scrollTo(0,0);all.querySelector('h1').focus({preventScroll:true});
  }else if(hash.startsWith('#experience/')){
   const id=hash.slice('#experience/'.length),c=companies.find(x=>x.id===id);
   if(!c){history.replaceState(null,'',window.location.pathname+window.location.search);return applyRoute()}
-  main.hidden=true;detail.classList.add('is-open');byId('detailName').textContent=c.name;byId('detailRole').textContent=c.role;
+  main.hidden=true;detail.hidden=false;detail.classList.add('is-open');byId('detailName').textContent=c.name;byId('detailRole').textContent=c.role;
   byId('detailImage').src=c.image;byId('detailImage').alt=c.name+' — visual concept';
   byId('detailDesc').textContent=caseContent[c.id].intro;
   byId('case-facts').replaceChildren(...caseContent[c.id].facts.map(([label,copy])=>{const item=document.createElement('section'),h=document.createElement('h2'),p=document.createElement('p');h.textContent=label;p.textContent=copy;item.append(h,p);return item;}));
   byId('detailExternal').hidden=!c.url;if(c.url)byId('detailExternal').href=c.url;
-  window.scrollTo(0,0);
+  window.scrollTo(0,0);byId('detailName').focus({preventScroll:true});
  }else if(prevMainHidden){
-  requestAnimationFrame(()=>{measureStory();const target=hash.startsWith('#')?document.getElementById(hash.slice(1)):null;if(target)target.scrollIntoView({behavior:'instant',block:'start'});else window.scrollTo({top:lastRouteScroll,behavior:'instant'});paintStory()});
+  requestAnimationFrame(()=>{measureStory();const target=hash.startsWith('#')?document.getElementById(hash.slice(1)):null;if(target)target.scrollIntoView({behavior:'instant',block:'start'});else window.scrollTo({top:lastRouteScroll,behavior:'instant'});paintStory();if(lastRouteFocus&&lastRouteFocus.isConnected&&!target)lastRouteFocus.focus({preventScroll:true})});
  }
 }
 function renderAll(){
@@ -141,8 +141,7 @@ function updateMobileClass(){document.documentElement.classList.toggle('mobile-a
 byId('storyPrev').addEventListener('click',()=>goToProject(active-1));
 byId('storyNext').addEventListener('click',()=>goToProject(active+1));
 byId('storyCase').addEventListener('click',()=>goDetail(companies[active].id));
-frame.addEventListener('click',()=>{if(metrics&&window.scrollY>=metrics.start+metrics.introDist*.72)goDetail(companies[active].id)});
-frame.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(metrics&&window.scrollY>=metrics.start+metrics.introDist*.72)goDetail(companies[active].id)}});
+frame.addEventListener('click',event=>{if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button)return;event.preventDefault();if(metrics&&window.scrollY>=metrics.start+metrics.introDist*.72)goDetail(companies[active].id)});
 byId('allBtn')?.addEventListener('click',()=>goDetail('all'));byId('heroRefCase').addEventListener('click',()=>goDetail(companies[active].id));
 byId('backBtn').addEventListener('click',()=>{window.location.hash='#home'});
 byId('backAllBtn').addEventListener('click',()=>{window.location.hash='#home'});
@@ -151,6 +150,6 @@ window.addEventListener('hashchange',applyRoute);
 window.addEventListener('scroll',schedulePaint,{passive:true});
 window.addEventListener('resize',()=>{measureStory();schedulePaint()},{passive:true});
 const ros=new ResizeObserver(()=>{measureStory();schedulePaint()});ros.observe(site);
-setActive(0);renderScreens();setHero('0');updateMobileClass();applyRoute();requestAnimationFrame(()=>{measureStory();paintStory()});
+setActive(0);renderScreens();updateMobileClass();applyRoute();requestAnimationFrame(()=>{measureStory();paintStory()});
 })();
 

@@ -82,10 +82,10 @@
   ['Объект под увеличением','EXPLORE\nTHE DETAILS.','From the whole picture to the smallest part.','Камера приближается к выбранному участку. Мини-карта и список позволяют переместиться к другому навыку; кнопка возвращает общий вид.','SELECT ON THE MAP · EXPLORE UP CLOSE']
  ];
  const capability={strategy:'Direction & priorities',design:'Structure & experience',performance:'Acquisition & relevance',analytics:'Measurement & insight',automation:'Context & continuity',leadership:'People & delivery'};
- let items=M.initial,storageAvailable=true;
+ const items=M.initial;
  let state=M.createState(items);const figma=items.findIndex(x=>x.name.toLowerCase()==='figma');if(figma>=0)state=M.reduce(state,{type:'select',value:figma});
  let unit=45,manualReduced=false;const media=window.matchMedia('(prefers-reduced-motion: reduce)');
- const field=$('field'),stage=$('stage'),editor=$('editor'),cubeNodes=[],slotItems=new Map(),miniNodes=[],listNodes=[];
+ const field=$('field'),stage=$('stage'),cubeNodes=[],slotItems=new Map(),miniNodes=[],listNodes=[];
  function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
  function button(text,fn){const b=el('button','',text);b.type='button';b.addEventListener('click',fn);return b;}
  function dispatch(action,focus=false){state=M.reduce(state,action);render(action.type==='hover');if(focus&&state.selected>=0){const cube=cubeNodes[M.slotFor(state.selected)];if(cube)cube.focus({preventScroll:true});}}
@@ -98,15 +98,15 @@
    socket.dataset.slot=String(slot);if(item)socket.append(el('span','',capability[item.category]));$('sockets').append(socket);
    const cube=button('',()=>{if(i>=0)dispatch({type:'select',value:i});});cube.className='skills-cube'+(i<0?' is-empty':'');cube.dataset.slot=String(slot);cube.dataset.index=String(i);
    if(!item)cube.setAttribute('aria-hidden','true');cube.setAttribute('aria-label',item?item.name+' — '+M.categories[item.category]:'Surface module');cube.setAttribute('aria-controls','skills-detail-name');
-   const inside=el('span','sk-inner',item?item.name:'');cube.append(inside);
-   ['front','back','left','right'].forEach((side,j)=>{const face=el('span','sk-side sk-'+side);face.append(el('span','skills-flap-label',item?[M.categories[item.category],'EXPLORE','TOOL','CAPABILITY'][j]:''));cube.append(face);});
-   const cap=el('span','sk-cap');cap.append(el('span','sk-label',item?item.name:'+'));cube.append(cap);
+   if(item){const inside=el('span','sk-inner',item.name);inside.setAttribute('aria-hidden','true');cube.append(inside);}
+   ['front','back','left','right'].forEach((side,j)=>{const face=el('span','sk-side sk-'+side);face.setAttribute('aria-hidden','true');if(item)face.append(el('span','skills-flap-label',[M.categories[item.category],'EXPLORE','TOOL','CAPABILITY'][j]));cube.append(face);});
+   const cap=el('span','sk-cap');cap.setAttribute('aria-hidden','true');cap.append(el('span','sk-label',item?item.name:'+'));cube.append(cap);
    cube.addEventListener('pointerenter',()=>{if(i>=0&&!manualReduced&&!media.matches&&(state.variant===0||state.variant===2))dispatch({type:'hover',value:i});});
    cube.addEventListener('keydown',e=>{
     const keys={ArrowRight:1,ArrowLeft:-1,ArrowDown:10,ArrowUp:-10};if(Object.hasOwn(keys,e.key)){e.preventDefault();dispatch({type:'step',value:keys[e.key]},true);}
     if(e.key==='Home'||e.key==='End'){e.preventDefault();const ids=M.matches(state);dispatch({type:'select',value:e.key==='Home'?ids[0]:ids[ids.length-1]},true);}
    });field.append(cube);cubeNodes.push(cube);
-   const mini=button('',()=>dispatch({type:'select',value:i}));mini.setAttribute('aria-label',item?item.name:'Surface module');mini.disabled=i<0;$('minimap').append(mini);miniNodes.push(mini);
+   if(state.variant===9){const mini=button('',()=>dispatch({type:'select',value:i}));mini.setAttribute('aria-label',item?item.name:'Surface module');mini.disabled=i<0;$('minimap').append(mini);miniNodes.push(mini);}
   }
   state.items.forEach((item,i)=>{const b=button(item.name,()=>dispatch({type:'select',value:i}));$('list').append(b);listNodes.push(b);});
   resize();
@@ -148,9 +148,19 @@
   root.style.minHeight=expanded?'':(panel.offsetHeight+Math.round(window.DTViewport.height()*.45))+'px';
   panel.style.top=expanded?'':Math.min(0,window.DTViewport.height()-panel.offsetHeight)+'px';
  }
- build();render();motion();new ResizeObserver(resize).observe(stage);if(document.fonts)document.fonts.ready.then(fitHeading);
+ let initialized=false;
+ function initialize(){
+  if(initialized)return;initialized=true;
+  build();render();motion();new ResizeObserver(resize).observe(stage);if(document.fonts)document.fonts.ready.then(fitHeading);
+  measureHold();root.dataset.ready='true';
+ }
+ // Reserve its scroll travel immediately so lazy construction cannot move later anchors.
  new ResizeObserver(measureHold).observe(root.querySelector('.skills-showcase'));
  new MutationObserver(measureHold).observe($('list'),{attributes:true,attributeFilter:['hidden']});
  new MutationObserver(measureHold).observe(document.getElementById('mainPage'),{attributes:true,attributeFilter:['hidden']});
  window.addEventListener('resize',measureHold,{passive:true});measureHold();
+ // Build the spatial collection before it enters view, without blocking the Hero.
+ if(location.hash==='#skills'||!('IntersectionObserver' in window))initialize();
+ else {const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){initialize();observer.disconnect();}},{rootMargin:'150% 0px'});observer.observe(root);}
+
 })();

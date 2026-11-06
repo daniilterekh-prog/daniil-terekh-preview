@@ -11,7 +11,8 @@
   panels.forEach(panel=>{panel.hidden=panel.id!=='service-panel-'+key;});
   close.hidden=key===null;
   if(window.DTScenes)window.DTScenes.goTo(section.getBoundingClientRect().top+scrollY);
-  if(restoreFocus)buttons.find(b=>b.dataset.service===key)?.focus({preventScroll:true});
+  if(key==='team')close.focus({preventScroll:true});
+  else if(restoreFocus)buttons.find(b=>b.dataset.service===key)?.focus({preventScroll:true});
  }
  buttons.forEach(button=>{
   button.addEventListener('click',()=>select(selected===button.dataset.service?null:button.dataset.service));
