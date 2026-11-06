@@ -19,8 +19,8 @@
    const add=point=>all.push({id:section.id,...point});
    if(section.id==='hero'){
     add({y:0,semantic:true});
-    const copy=section.querySelector('.hero-introduction');
-    if(copy){const end=absolute(copy)+copy.offsetHeight+24-window.DTViewport.height();if(end>TOLERANCE)add({y:end,semantic:true});}
+    const content=Array.from(section.querySelectorAll('.hero-name,.signature'));
+    if(content.length){const end=Math.max(...content.map(el=>absolute(el)+el.offsetHeight))+24-window.DTViewport.height();if(end>TOLERANCE)add({y:end,semantic:true});}
     continue;
    }
    if(section.id==='work'){

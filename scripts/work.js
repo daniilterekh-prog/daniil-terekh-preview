@@ -49,12 +49,11 @@ function measureStory(){
  const endLeft=mobile?stageW-targetW-stageW*.055:(stageW-targetW)/2+28;
  const startTop=mobile?stageH*.235:stageH*.06;
  const endTop=mobile?stageH*.09:stageH*.095;
- // Reserve the actual copy height before the device enters, including short screens.
- const introduction=document.querySelector('.hero-introduction');
+ // Keep the entering device below the name and slogan, including short screens.
  const previousClearance=parseFloat(section.style.getPropertyValue('--story-clearance'))||0;
  const naturalTop=section.getBoundingClientRect().top+scrollY-previousClearance;
- const copyBottom=introduction.getBoundingClientRect().bottom+scrollY;
- const clearance=Math.max(0,Math.ceil(copyBottom+32-naturalTop-startTop+initialW*.1));
+ const heroBottom=Math.max(byId('heroName').getBoundingClientRect().bottom,document.querySelector('#hero .signature').getBoundingClientRect().bottom)+scrollY;
+ const clearance=Math.max(0,Math.ceil(heroBottom+32-naturalTop-startTop+initialW*.1));
  if(clearance!==previousClearance)section.style.setProperty('--story-clearance',clearance+'px');
  const top=section.getBoundingClientRect().top+window.scrollY;
  const start=top-stageTop;
@@ -99,7 +98,7 @@ function paintStory(){
 }
 function setActive(i){
  active=i;const c=companies[i];
- byId('storyName').textContent=c.name;byId('heroRefCompany').textContent=c.name;byId('heroRefCount').textContent=String(i+1).padStart(2,'0');
+ byId('storyName').textContent=c.name;
  frame.setAttribute('aria-label','Selected company: '+c.name);
  [...track.children].forEach((layer,index)=>{layer.inert=index!==i;layer.setAttribute('aria-hidden',String(index!==i));});
 }
@@ -193,7 +192,6 @@ function updateMobileClass(){document.documentElement.classList.toggle('mobile-a
 byId('storyPrev').addEventListener('click',()=>goToProject(active-1));
 byId('storyNext').addEventListener('click',()=>goToProject(active+1));
 byId('allBtn').addEventListener('click',event=>{if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;lastRouteScroll=scrollY;lastRouteFocus=document.activeElement;detailReturn='work';});
-byId('heroRefCase').addEventListener('click',()=>goDetail(companies[active].id));
 byId('backBtn').addEventListener('click',()=>{window.location.hash=detailReturn==='all'?'#experience/all':'#work'});
 byId('backAllBtn').addEventListener('click',()=>{window.location.hash='#work'});
 byId('siteWorkLink').addEventListener('click',e=>{if(e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;e.preventDefault();if(byId('mainPage').hidden){location.hash='#work';}else goToProject(0)});
@@ -201,7 +199,7 @@ window.addEventListener('hashchange',applyRoute);
 window.addEventListener('scroll',schedulePaint,{passive:true});
 window.addEventListener('resize',()=>{measureStory();schedulePaint()},{passive:true});
 const ros=new ResizeObserver(()=>{measureStory();schedulePaint()});ros.observe(site);
-ros.observe(document.querySelector('.hero-introduction'));
+document.querySelectorAll('#hero .hero-name,#hero .signature').forEach(element=>ros.observe(element));
 setActive(0);renderScreens();updateMobileClass();applyRoute();requestAnimationFrame(()=>{measureStory();paintStory()});
 })();
 

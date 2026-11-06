@@ -1,11 +1,4 @@
-/* Clarity pass: preserve the scene compositions and add an explicit reading path. */
-.hero-introduction{position:absolute;left:var(--page-gutter);top:calc(29cqw + var(--hero-air) + 36px);z-index:6;max-width:590px;width:45%}
-.hero-introduction p{font:clamp(23px,2.25vw,34px)/1.18 Georgia,serif;letter-spacing:-.025em;color:#e6e5df;margin:0 0 18px}
-.hero-introduction>span{display:block;font:14px/1.65 var(--sans);color:#b8b9b4}
-.hero-introduction>span br::after{content:' '}
-.hero-shortcuts{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:16px}
-.hero-shortcuts a{display:inline-flex;align-items:center;gap:20px;min-height:44px;font:12px/1.4 var(--sans);color:#e6e5df;text-decoration:underline;text-underline-offset:6px;text-decoration-color:#747570}
-.hero-shortcuts a:hover{text-decoration-color:currentColor}
+/* Case context, contact paths and responsive scene spacing. */
 .site.ref-mode .scroll-experience{margin-top:calc(100svh - 66.6657cqw - var(--hero-air) - 152px + var(--story-clearance,0px))}
 .case-visual-note{font:12px/1.6 var(--sans);color:#b5b6b1;max-width:800px;margin:18px 0 0}
 .case-facts .case-recognition{grid-column:1/-1;border-block:1px solid #444;padding:0;margin-top:8px}
@@ -33,15 +26,8 @@
 .proof-journey{display:grid;gap:12px;margin-top:24px;font:20px/1.2 ThinkingNarrow,Impact,sans-serif;text-align:left}
 .proof-journey span+span::before{content:'↓';display:block;margin-bottom:8px;color:#666;font:14px/1 var(--sans)}
 .proof-sheet .proof-sheet-bottom small{font-size:8px;letter-spacing:.06em}
-@media(max-width:1050px) and (min-width:721px){.hero-introduction p{font-size:24px}.hero-introduction>span{font-size:13px}.hero-shortcuts{gap:6px 18px}}
 @media(max-width:720px){
  .mobile-actual .site.ref-mode .scroll-experience{margin-top:calc(76.5svh - 597px - 39cqw + var(--story-clearance,0px))!important}
- .hero-introduction{top:calc(160px + 70cqw);left:var(--page-gutter);width:88%;max-width:none}
- .hero-introduction p{font-size:24px;margin-bottom:14px}
- .hero-introduction>span{font-size:13px;line-height:1.6}
- .hero-introduction>span br{display:contents}
- .hero-shortcuts{gap:8px 18px;margin-top:12px}
- .hero-shortcuts a{font-size:11px;gap:10px}
  .contact-intents{grid-template-columns:1fr;gap:2px;max-width:420px}
  .contact-intents a{padding:18px 0;min-height:94px}
  .contact-intents a>span{font-size:23px}

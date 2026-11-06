@@ -241,7 +241,6 @@
 .site.ref-mode .hero-name-reference { top:calc(3.322cqw + var(--hero-air)); }
 .site.ref-mode .signature { top:calc(5.21cqw + var(--hero-air) + 36px); }
 .site.ref-mode .hero-position { top:calc(25.71cqw + var(--hero-air) + 40px); }
-.site.ref-mode .hero-ref-meta { top:max(calc(26.98cqw + var(--hero-air) + 40px),calc(100svh - 260px)); }
 .thinking-sticky { padding-top:64px;padding-bottom:40px; }
 .edit-section { padding-top:64px;padding-bottom:64px; }
 .skills-showcase { padding-top:72px;padding-bottom:64px; }
