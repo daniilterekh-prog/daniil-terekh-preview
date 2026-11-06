@@ -102,7 +102,19 @@
         "basis": "Organizer source"
       }
     ],
-    "awardsIntro": "Recognition across the international BARNES network. Each entry names the office, partner or individual recipient."
+    "awardsIntro": "Recognition across the international BARNES network. Each entry names the office, partner or individual recipient.",
+    "tabletRecognition": [
+      {
+        "index": 0,
+        "label": "Luxury Lifestyle Awards",
+        "scope": "BARNES Portugal"
+      },
+      {
+        "index": 2,
+        "label": "TOP 100 Real Estate Brokers",
+        "scope": "Charles H. Morgen · Switzerland"
+      }
+    ]
   },
   {
     "id": "cycle",
@@ -168,7 +180,7 @@
     "collaboration": "Worked with SMM, design, video production and sales. Contributed to collaborations with developers and design studios.",
     "logo": "assets/companies/mk-elit-logo.svg",
     "homepageScreen": "assets/companies/mk-elit-spread.png",
-    "companyBrief": "Saint Petersburg. European Property Awards · Urban Awards.",
+    "companyBrief": "Luxury real estate agency in Saint Petersburg.",
     "awards": [
       {
         "title": "European Property Awards",
@@ -269,6 +281,16 @@
         "recipient": "Anton Fedorov, MK ELIT",
         "basis": "Company publication"
       }
+    ],
+    "tabletRecognition": [
+      {
+        "index": 0,
+        "label": "European Property Awards"
+      },
+      {
+        "index": 1,
+        "label": "Urban Awards"
+      }
     ]
   },
   {
@@ -367,6 +389,16 @@
         "recipient": "Elvira Sharshenalieva, founder of EVA Real Estate",
         "basis": "Organizer source"
       }
+    ],
+    "tabletRecognition": [
+      {
+        "index": 2,
+        "label": "Sobha Stars"
+      },
+      {
+        "index": 5,
+        "label": "MAG Top Broker"
+      }
     ]
   },
   {
@@ -464,6 +496,18 @@
         "status": "Finalist",
         "recipient": "SETEVIE Agency",
         "basis": "Company publication"
+      }
+    ],
+    "tabletRecognition": [
+      {
+        "index": 0,
+        "label": "Perspectum Awards",
+        "status": "Bronze · Best B2B Event"
+      },
+      {
+        "index": 1,
+        "label": "Silver Mercury",
+        "status": "Shortlist · Best Private Event"
       }
     ]
   },

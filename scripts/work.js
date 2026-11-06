@@ -4,7 +4,7 @@
 const allProjects=window.DTExperience.projects;
 const companies=window.DTExperience.featured;
 const originalTitle=document.title;
-let detailReturn='work',archiveScroll=0,archiveFilter='all';
+let detailReturn='work',archiveScroll=0,archiveFilter='all',recognitionTarget=null;
 const arrow='<svg class="ui-arrow" aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 function element(tag,className,text){const el=document.createElement(tag);if(className)el.className=className;if(text)el.textContent=text;return el;}
 const byId=id=>document.getElementById(id);
@@ -26,6 +26,23 @@ function renderScreens(){
   link.addEventListener('click',()=>{lastRouteScroll=window.scrollY;lastRouteFocus=document.activeElement;detailReturn='work';});
   info.append(logo,brief,role,link);
   const website=element('div','story-company-website'),img=element('img');img.src=c.homepageScreen;img.alt=c.homepageAlt||c.name+' — company homepage';img.loading=i<2?'eager':'lazy';img.decoding='async';website.append(img);
+  const highlights=(c.tabletRecognition||[]).filter(item=>c.awards?.[item.index]);
+  if(highlights.length){
+   layer.classList.add('has-recognition');
+   const recognition=element('a','story-recognition');recognition.href='#experience/'+c.id;recognition.setAttribute('aria-label','View all '+c.awards.length+' recognition entries for '+c.name);
+   const heading=element('span','story-recognition-heading');heading.append(element('span','','Company recognition'),element('span','','All '+c.awards.length+' ↗'));
+   const items=element('span','story-recognition-items');
+   for(const featured of highlights){
+    const award=c.awards[featured.index],item=element('span','story-recognition-item');
+    item.append(element('strong','',featured.label||award.title),element('span','story-recognition-meta',[featured.status||award.status,award.year].filter(Boolean).join(' · ')));
+    if(featured.scope)item.append(element('span','story-recognition-scope',featured.scope));
+    items.append(item);
+   }
+   recognition.append(heading,items);recognition.addEventListener('click',event=>{
+    if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
+    recognitionTarget=c.id;lastRouteScroll=window.scrollY;lastRouteFocus=recognition;detailReturn='work';
+   });website.append(recognition);
+  }
   layer.append(info,website);layer.inert=i!==active;layer.setAttribute('aria-hidden',String(i!==active));track.append(layer);
  });
  requestAnimationFrame(()=>{measureStory();paintStory()});
@@ -110,11 +127,6 @@ function goToProject(index){
  const y=m.start+offset;
  if(window.DTScenes)window.DTScenes.goTo(y);else window.scrollTo({top:Math.max(0,y),behavior:'instant'});
 }
-function goDetail(id){
- if(!byId('mainPage').hidden){lastRouteScroll=window.scrollY;lastRouteFocus=document.activeElement;detailReturn='work';}
- else if(byId('allPage').classList.contains('is-open')){archiveScroll=window.scrollY;lastRouteFocus=document.activeElement;detailReturn='all';}
- window.location.hash='#experience/'+encodeURIComponent(id);
-}
 function scrollInstant(top){window.scrollTo({top:Math.max(0,top),behavior:'instant'});}
 function focusTitle(page){const heading=page.querySelector('h1');heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}
 function renderDetail(c){
@@ -151,6 +163,7 @@ function renderDetail(c){
  document.title=c.name+' — Daniil Terekh';
 }
 function applyRoute(){
+ const openRecognitionFor=recognitionTarget;recognitionTarget=null;
  let hash;try{hash=decodeURIComponent(window.location.hash||'');}catch{history.replaceState(null,'',window.location.pathname+window.location.search);hash='';}
  const main=byId('mainPage'),detail=byId('detailPage'),all=byId('allPage');
  const prevMainHidden=main.hidden;
@@ -162,6 +175,10 @@ function applyRoute(){
   const id=hash.slice('#experience/'.length),c=allProjects.find(x=>x.id===id);
   if(!c){history.replaceState(null,'',window.location.pathname+window.location.search+'#experience/all');return applyRoute();}
   main.hidden=true;detail.hidden=false;detail.dataset.case=c.id;detail.classList.add('is-open');renderDetail(c);byId('detailVisual').hidden=c.id==='barnes'||!c.image;scrollInstant(0);focusTitle(detail);
+  if(openRecognitionFor===c.id){
+   const recognition=detail.querySelector('.case-recognition');
+   if(recognition){recognition.open=true;requestAnimationFrame(()=>{if(detail.hidden||detail.dataset.case!==c.id)return;recognition.querySelector('summary').focus({preventScroll:true});recognition.scrollIntoView({behavior:'instant',block:'start'});});}
+  }
  }else{
   document.title=originalTitle;
   if(prevMainHidden)requestAnimationFrame(()=>{measureStory();if(hash==='#work'){scrollInstant(lastRouteScroll||metrics?.start+metrics?.introDist||0);}else{const target=hash.startsWith('#')?document.getElementById(hash.slice(1)):null;if(target)target.scrollIntoView({behavior:'instant',block:'start'});else scrollInstant(lastRouteScroll);}paintStory();if(lastRouteFocus?.isConnected&&!lastRouteFocus.closest('[inert]'))lastRouteFocus.focus({preventScroll:true});});
