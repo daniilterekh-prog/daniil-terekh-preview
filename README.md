@@ -1,24 +1,24 @@
 # Daniil Terekh — website preview
 
-[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=profile-contact-v68#home) · [Кейсы](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=profile-contact-v68#experience/all) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/services/?v=profile-contact-v68)
+[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=header-center-v69#home) · [Кейсы](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=header-center-v69#experience/all) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/services/?v=header-center-v69)
 
-Обновлено 6 ноября 2026 по поручению владельца. Source commit `6a3b39f4c81d9538b719b66c818a0eecc750ee08`, сборка `website/site/dist`.
+Обновлено 6 ноября 2026 по поручению владельца. Source commit `6f9e58eb2fa8dd15daa5a4c53b26ef0dd71ade2c`, сборка `website/site/dist`.
 
-В [Still Curious](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=profile-contact-v68#human) указан актуальный стаж 8 лет, международные кампании, бюджеты до $1 800 в день и образование в маркетинге. В MK ELIT и Setevie добавлены результаты по уточнениям владельца. В MK ELIT также описано внедрение AI-аналитики звонков.
+В [Still Curious](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=header-center-v69#human) указан актуальный стаж 8 лет, международные кампании, бюджеты до $1 800 в день и образование в маркетинге. В MK ELIT и Setevie добавлены результаты по уточнениям владельца. В MK ELIT также описано внедрение AI-аналитики звонков.
 
 В планшете BARNES, MK ELIT, EVA и Setevie показаны выбранные награды компаний. Карточка открывает полный список в кейсе, Back возвращает к исходному слайду. На телефоне — один акцент, на широком экране — два. На коротком горизонтальном экране кнопка каталога не перекрывает кнопку кейса.
 
-В компактном белом хедере высотой 52 px указаны Daniil Terekh / Head of Marketing. Work открывает отдельный каталог кейсов, Services — страницу услуг; Approach, Skills и About ведут к разделам главной, Let’s talk открывает общее окно связи. На мобильных — Menu с поддержкой клавиатуры. Высота хедера учтена в сценах и якорях, текущий раздел подсвечивается.
+В компактном белом хедере высотой 52 px указаны Daniil Terekh / Head of Marketing. Work и Services выделены в отдельную группу по центру окна. Work открывает отдельный каталог кейсов, Services — страницу услуг; Approach, Skills и About ведут к разделам главной, Let’s talk открывает общее окно связи. На мобильных — Menu с поддержкой клавиатуры, Work и Services в отдельной первой строке. Высота хедера учтена в сценах и якорях, текущий раздел подсвечивается.
 
 Новая статическая страница `services/` содержит семь направлений, цены, связанные кейсы, этапы работы и контекстные CTA. На ней обычная прокрутка; без JavaScript доступны описания и email. Метаданные и `sitemap.xml` включены. Содержание и цены берутся из тех же панелей, что и на главной.
 
 Семь панелей How can I help объясняют задачу, состав работы и результат. Направления и цены сохранены; текст для руководящей роли остаётся отдельным равноправным сценарием.
 
-В [Find the Signal](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=profile-contact-v68#thinking) усилен разлёт слов: сжатие перед импульсом, глубина и разные размеры букв, последовательная сборка в результаты. Стекло контрастнее при приближении. Четыре остановки и точный обратный проход сохранены; reduced motion показывает цельные фразы.
+В [Find the Signal](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=header-center-v69#thinking) усилен разлёт слов: сжатие перед импульсом, глубина и разные размеры букв, последовательная сборка в результаты. Стекло контрастнее при приближении. Четыре остановки и точный обратный проход сохранены; reduced motion показывает цельные фразы.
 
-Все кнопки связи открывают [общее окно](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=profile-contact-v68#connect) с WhatsApp, Telegram, Email, Callback и WeChat. Email и Telegram @DANIILTEREKH доступны; WhatsApp, Callback и WeChat по решению владельца пока заглушки. Telegram открывается с черновиком по теме услуги, проекта или роли; сообщение отправляет сам посетитель. Используется [официальный формат публичных ссылок Telegram](https://core.telegram.org/api/links#public-username-links).
+Все кнопки связи открывают [общее окно](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=header-center-v69#connect) с WhatsApp, Telegram, Email, Callback и WeChat. Email и Telegram @DANIILTEREKH доступны; WhatsApp, Callback и WeChat по решению владельца пока заглушки. Telegram открывается с черновиком по теме услуги, проекта или роли; сообщение отправляет сам посетитель. Используется [официальный формат публичных ссылок Telegram](https://core.telegram.org/api/links#public-username-links).
 
-В In Practice убрана соединительная линия с точкой между пунктами и папкой. Правая композиция опущена и выровнена по центру левой колонки. [Открыть блок](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=profile-contact-v68#evidence).
+В In Practice убрана соединительная линия с точкой между пунктами и папкой. Правая композиция опущена и выровнена по центру левой колонки. [Открыть блок](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=header-center-v69#evidence).
 
 Первый экран по запросу владельца оставлен только с именем и исходным слоганом. Дополнительные тексты, кнопки и подпись BARNES убраны. Верхняя навигация теперь закреплена на белом фоне. Планшет дополнительно поднят, чтобы больше кейса попадало в Hero; видимая кнопка первого кейса доступна уже при появлении устройства.
 
@@ -26,6 +26,6 @@
 
 Фильм запрашивается только после нажатия Play с официального источника https://barn-estate.ru/upload/barnes.mp4. Приватные исходники, материалы аудита и архив в этот репозиторий не копируются.
 
-Предыдущая опубликованная версия: `6ae4d685bd06e80a4b87853deb7f634b57cbc9be` в истории Git.
+Предыдущая опубликованная версия: `6bb251740aa356638641e8c5b205e81625bbc15e` в истории Git.
 
 Иконки контактов: [Bootstrap Icons 1.13.1](https://github.com/twbs/icons/tree/v1.13.1), MIT, пять inline SVG без runtime-зависимостей. [Лицензия](assets/licenses/bootstrap-icons-LICENSE.txt).

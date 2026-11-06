@@ -6,6 +6,8 @@ html.nav-open,html.nav-open body{overflow:hidden}
 .header-name{font-size:11px;font-weight:600;letter-spacing:.07em;margin-right:auto;white-space:nowrap;min-height:51px;display:inline-flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px}
 .header-role{font-size:10px;font-weight:400;letter-spacing:.01em;color:#555652}
 .header-navigation ul{display:flex;gap:24px;align-items:center;list-style:none;margin:0;padding:0}
+.header-navigation .header-pages{position:absolute;top:env(safe-area-inset-top,0px);left:50%;transform:translateX(-50%);gap:32px}
+.header-pages a{font-weight:600}
 .header-navigation a{position:relative;display:flex;align-items:center;min-height:51px;color:#5a5b57;white-space:nowrap}
 .header-navigation a:hover,.header-navigation a[aria-current]{color:#111}
 .header-navigation a[aria-current]::after{content:'';position:absolute;bottom:9px;left:0;right:0;height:1px;background:currentColor}
@@ -27,6 +29,8 @@ html.nav-open,html.nav-open body{overflow:hidden}
  .header-navigation{order:4;flex-basis:100%;padding:12px 0 24px;max-height:calc(100svh - var(--header-height));overflow-y:auto;overscroll-behavior:contain}
  .header-navigation[hidden]{display:none}
  .header-navigation ul{display:block}
+ .header-navigation .header-pages{position:static;transform:none;display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:16px}
+ .header-pages a{justify-content:center}
  .header-navigation a{font-size:24px;min-height:52px;border-top:1px solid #deded9}
  .header-navigation a[aria-current]::after{left:auto;bottom:24px;width:18px}
  .site-header.is-enhanced[data-menu-open="true"]{box-shadow:0 12px 28px #0002}
