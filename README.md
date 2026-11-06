@@ -1,11 +1,11 @@
-# daniil-terekh-preview
+# Daniil Terekh — website preview
 
-Daniil Terekh / CYCLE — website preview.
+[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=clarity-v57#home) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=clarity-v57#services) · [Контакт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=clarity-v57#contact)
 
-[Find the Signal](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=optical-polish-v52#thinking) · [How can I help](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=optical-polish-v52#services) · [Кейс BARNES](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=optical-polish-v52#experience/barnes)
+Обновлено 6 ноября 2026 по поручению владельца. Source commit `9b4692f002c7ef6db3f20c5b697e47e4ae56ed0a`, сборка `website/site/dist`.
 
-Обновлено 6 ноября 2026 по просьбе владельца. Сборка `website/site/dist`, source commit `ec443188429d4e818ca6d937dacef05c72fef723`: линза без декоративных полос, более чёткая прорисовка и финальные пункты внутри стекла; содержимое услуг чуть ниже. В сборке также сохранены выбор услуг на месте, широкое видео-херо BARNES, кнопки OPEN CASE и исправления навигации; синхронизированы истории решений и стороны кубов навыков из текущего main. Приватные документы и исходный архив сюда не копируются.
+Позиционирование на первом экране, пути для проектов и руководящих ролей, case notes вместо заглушек Evidence, контекст и личный вклад в кейсах, адаптивная витрина и нативная прокрутка при reduced motion. Сохранены линза, кубы, все шесть выбранных компаний и видео BARNES.
 
-Фильм загружается после нажатия PLAY BRAND FILM с официального публичного адреса https://barn-estate.ru/upload/barnes.mp4; в репозитории хранится только постер.
+Фильм запрашивается только после нажатия Play с официального источника https://barn-estate.ru/upload/barnes.mp4. Приватные исходники, материалы аудита и архив в этот репозиторий не копируются.
 
-Предыдущая версия доступна в истории Git (`5806e62442f46ca65ea0696187b9fac275670d41`).
+Предыдущая опубликованная версия: `752533e` в истории Git.

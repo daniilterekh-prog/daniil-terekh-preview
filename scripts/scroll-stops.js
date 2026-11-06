@@ -17,7 +17,12 @@
   for(const section of main.children){
    if(!section.matches('section,footer'))continue;
    const add=point=>all.push({id:section.id,...point});
-   if(section.id==='hero'){add({y:0,semantic:true});continue;}
+   if(section.id==='hero'){
+    add({y:0,semantic:true});
+    const copy=section.querySelector('.hero-introduction');
+    if(copy){const end=absolute(copy)+copy.offsetHeight+24-window.DTViewport.height();if(end>TOLERANCE)add({y:end,semantic:true});}
+    continue;
+   }
    if(section.id==='work'){
     JSON.parse(section.dataset.scrollStops||'[]').forEach(y=>add({y,semantic:true}));continue;
    }
@@ -90,7 +95,7 @@
   target instanceof Element&&(target.closest('input,textarea,select,[contenteditable="true"]')||nestedScroll(target,delta));}
  window.addEventListener('wheel',event=>{
   const delta=event.deltaY;
-  if(event.ctrlKey||event.metaKey||Math.abs(delta)<=Math.abs(event.deltaX||0)||exempt(event.target,delta)||event.cancelable===false){releaseGesture();return;}
+  if(reduced.matches||event.ctrlKey||event.metaKey||Math.abs(delta)<=Math.abs(event.deltaX||0)||exempt(event.target,delta)||event.cancelable===false){releaseGesture();return;}
   event.preventDefault();
   const direction=Math.sign(delta),now=performance.now();
   const fresh=!wheelGesture||wheelGesture.direction!==direction||now-wheelGesture.at>QUIET;
@@ -103,7 +108,7 @@
  },{passive:false});
  window.addEventListener('touchstart',event=>{
   releaseGesture();
-  if(event.touches.length!==1||main.hidden||document.querySelector('dialog[open]'))return;
+  if(reduced.matches||event.touches.length!==1||main.hidden||document.querySelector('dialog[open]'))return;
   const finger=event.touches[0];
   touch={x:finger.clientX,y:finger.clientY,origin:scrollY,target:event.target,direction:0,anchor:null,captured:false};
  },{passive:true});
@@ -126,7 +131,7 @@
  window.addEventListener('touchcancel',()=>{const gesture=touch;releaseGesture();if(gesture&&gesture.captured)moveTo(gesture.origin);},{passive:true});
  window.addEventListener('keydown',event=>{
   const keys=['ArrowDown','ArrowUp','PageDown','PageUp',' ','Home','End'];
-  if(event.defaultPrevented||!keys.includes(event.key)||event.ctrlKey||event.metaKey||event.altKey||exempt(event.target,event.key==='ArrowUp'||event.key==='PageUp'?-1:1))return;
+  if(reduced.matches||event.defaultPrevented||!keys.includes(event.key)||event.ctrlKey||event.metaKey||event.altKey||exempt(event.target,event.key==='ArrowUp'||event.key==='PageUp'?-1:1))return;
   if(event.key===' '&&event.target instanceof Element&&event.target.closest('button,a,[role="tab"]'))return;
   event.preventDefault();if(event.repeat)return;
   releaseGesture();measure();
@@ -137,6 +142,7 @@
  window.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse')releaseGesture();},{passive:true});
  window.addEventListener('hashchange',()=>{releaseGesture();measure();});
  document.addEventListener('visibilitychange',()=>{if(document.hidden)releaseGesture();});
+ reduced.addEventListener('change',releaseGesture);
  new MutationObserver(()=>{if(main.hidden)releaseGesture();}).observe(main,{attributes:true,attributeFilter:['hidden']});
  function resize(){
   const height=window.DTViewport.height();

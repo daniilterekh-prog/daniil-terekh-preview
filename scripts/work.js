@@ -40,9 +40,7 @@ function measureStory(){
  document.documentElement.style.setProperty('--stage-h',stageH+'px');
  const introDist=Math.round(stageH*(mobile?.35:.50)); const slideDist=Math.round(stageH*.65); const outroDist=Math.round(stageH*(mobile?.12:.20));
  section.style.height=(stageH+introDist+Math.max(0,companies.length-1)*slideDist+outroDist)+'px';
- const top=section.getBoundingClientRect().top+window.scrollY;
  const stageTop=parseFloat(getComputedStyle(sticky).top)||0;
- const start=top-stageTop;
  const stageW=sticky.clientWidth;
  // The persistent tablet leaves room for a navigation rail on the left.
  const targetW=mobile?Math.min(stageW*.78,(stageH-205)*.64):Math.min(stageW*.80,Math.max(300,stageH-250)*1.7);
@@ -51,6 +49,15 @@ function measureStory(){
  const endLeft=mobile?stageW-targetW-stageW*.055:(stageW-targetW)/2+28;
  const startTop=mobile?stageH*.235:stageH*.06;
  const endTop=mobile?stageH*.09:stageH*.095;
+ // Reserve the actual copy height before the device enters, including short screens.
+ const introduction=document.querySelector('.hero-introduction');
+ const previousClearance=parseFloat(section.style.getPropertyValue('--story-clearance'))||0;
+ const naturalTop=section.getBoundingClientRect().top+scrollY-previousClearance;
+ const copyBottom=introduction.getBoundingClientRect().bottom+scrollY;
+ const clearance=Math.max(0,Math.ceil(copyBottom+32-naturalTop-startTop+initialW*.1));
+ if(clearance!==previousClearance)section.style.setProperty('--story-clearance',clearance+'px');
+ const top=section.getBoundingClientRect().top+window.scrollY;
+ const start=top-stageTop;
  lastPaintLocal=null;
  metrics={mobile,start,stageH,stageW,labH,introDist,slideDist,outroDist,targetW,initialW,startLeft,endLeft,startTop,endTop};
  section.dataset.scrollStops=JSON.stringify(companies.map((_,i)=>Math.round(start+(i===0?introDist*.94:introDist+((i-1)+.92)*slideDist))));
@@ -117,6 +124,9 @@ function renderDetail(c){
  byId('detailImage').parentElement.hidden=!c.image;
  if(c.image){byId('detailImage').src=c.image;byId('detailImage').alt=c.imageAlt||c.name+' — company homepage';}
  byId('detailDesc').textContent=c.intro;
+ byId('caseVisualNote').textContent=c.id==='barnes'
+  ?'BARNES brand film · company context. My role covered digital marketing for the Moscow team.'
+  :c.id==='cycle'?'CYCLE · agency presentation.':c.image?.includes('/companies/')?'Current company website · shown for context. My contribution is described below.':'Experience overview · my role and contribution below.';
  const facts=byId('case-facts');facts.replaceChildren();
  for(const [heading,value] of [['The task.',c.challenge],['The approach.',c.approach],['My contribution.',c.contribution],['What took shape.',c.delivered]]){
   const section=element('section');section.append(element('h2','',heading));
@@ -124,8 +134,8 @@ function renderDetail(c){
   facts.append(section);
  }
  if(c.awards?.length){
-  const recognition=element('section','case-recognition');recognition.append(element('h2','','Awards & recognition.'));
-  recognition.append(element('p','case-recognition-intro',c.awardsIntro||'Recognition of the company and its people. Recipients are listed alongside each award.'));
+  const recognition=element('details','case-recognition');recognition.append(element('summary','','Company recognition · '+c.awards.length+' entries'));
+  recognition.append(element('p','case-recognition-intro','Company context, separate from my contribution. '+(c.awardsIntro||'Each entry names its recipient and source.')));
   const list=element('div','case-awards');
   for(const award of c.awards){
    const card=element('article','case-award');
@@ -152,7 +162,7 @@ function applyRoute(){
  }else if(hash.startsWith('#experience/')){
   const id=hash.slice('#experience/'.length),c=allProjects.find(x=>x.id===id);
   if(!c){history.replaceState(null,'',window.location.pathname+window.location.search+'#experience/all');return applyRoute();}
-  main.hidden=true;detail.hidden=false;detail.dataset.case=c.id;detail.classList.add('is-open');renderDetail(c);byId('detailVisual').hidden=c.id==='barnes';scrollInstant(0);focusTitle(detail);
+  main.hidden=true;detail.hidden=false;detail.dataset.case=c.id;detail.classList.add('is-open');renderDetail(c);byId('detailVisual').hidden=c.id==='barnes'||!c.image;scrollInstant(0);focusTitle(detail);
  }else{
   document.title=originalTitle;
   if(prevMainHidden)requestAnimationFrame(()=>{measureStory();if(hash==='#work'){scrollInstant(lastRouteScroll||metrics?.start+metrics?.introDist||0);}else{const target=hash.startsWith('#')?document.getElementById(hash.slice(1)):null;if(target)target.scrollIntoView({behavior:'instant',block:'start'});else scrollInstant(lastRouteScroll);}paintStory();if(lastRouteFocus?.isConnected&&!lastRouteFocus.closest('[inert]'))lastRouteFocus.focus({preventScroll:true});});
@@ -182,14 +192,16 @@ function updateMobileClass(){document.documentElement.classList.toggle('mobile-a
 
 byId('storyPrev').addEventListener('click',()=>goToProject(active-1));
 byId('storyNext').addEventListener('click',()=>goToProject(active+1));
-byId('allBtn')?.addEventListener('click',()=>goDetail('all'));byId('heroRefCase').addEventListener('click',()=>goDetail(companies[active].id));
+byId('allBtn').addEventListener('click',event=>{if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;lastRouteScroll=scrollY;lastRouteFocus=document.activeElement;detailReturn='work';});
+byId('heroRefCase').addEventListener('click',()=>goDetail(companies[active].id));
 byId('backBtn').addEventListener('click',()=>{window.location.hash=detailReturn==='all'?'#experience/all':'#work'});
 byId('backAllBtn').addEventListener('click',()=>{window.location.hash='#work'});
-byId('siteWorkLink').addEventListener('click',e=>{e.preventDefault();if(byId('mainPage').hidden){location.hash='#work';}else goToProject(0)});
+byId('siteWorkLink').addEventListener('click',e=>{if(e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;e.preventDefault();if(byId('mainPage').hidden){location.hash='#work';}else goToProject(0)});
 window.addEventListener('hashchange',applyRoute);
 window.addEventListener('scroll',schedulePaint,{passive:true});
 window.addEventListener('resize',()=>{measureStory();schedulePaint()},{passive:true});
 const ros=new ResizeObserver(()=>{measureStory();schedulePaint()});ros.observe(site);
+ros.observe(document.querySelector('.hero-introduction'));
 setActive(0);renderScreens();updateMobileClass();applyRoute();requestAnimationFrame(()=>{measureStory();paintStory()});
 })();
 
