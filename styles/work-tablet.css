@@ -1,0 +1,55 @@
+/* One self-contained company spread inside the persistent hero-to-work tablet. */
+#work .work-sr-title{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important}
+.site.ref-mode #work .story-sticky{overflow:visible}
+.site.ref-mode #work .story-frame{padding:10px;border:1px solid #656765!important;border-radius:23px;background:#151616;box-shadow:0 35px 90px #0008;cursor:default}
+#work .story-browser{display:none!important}
+.site.ref-mode #work .story-screens{aspect-ratio:1.7;border-radius:14px;opacity:1;box-shadow:none;background:#fff}
+#work .story-layer{display:grid;grid-template-columns:35% 65%;background:#fff;color:#171818;overflow:hidden;will-change:auto}
+#work .story-company-info{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:clamp(22px,2.6vw,40px);background:#fff;position:relative;z-index:1}
+.site.ref-mode #work .story-company-logo{display:block;object-fit:contain;object-position:left center;width:auto;max-width:100%;height:clamp(45px,5.4vw,76px);max-height:76px;filter:brightness(0);background:transparent;margin:0 0 auto}
+#work .story-company-brief{font:clamp(15px,1.45vw,21px)/1.45 Georgia,serif;color:#606160;margin:28px 0 16px;max-width:310px;text-wrap:pretty}
+#work .story-company-role{font:400 clamp(25px,3vw,43px)/1.05 ThinkingNarrow,Impact,sans-serif;letter-spacing:-.01em;text-transform:uppercase;margin:0 0 28px;max-width:340px;text-wrap:balance}
+#work .story-company-case{display:flex;align-items:center;justify-content:space-between;gap:15px;width:100%;min-height:64px;padding:16px 18px;background:#171818;color:#f3f3f0;font:12px/1.35 var(--sans);letter-spacing:.045em;margin-top:auto;transition:background .2s}
+#work .story-company-case:hover{background:#343636}#work .story-company-case .ui-arrow{width:26px;height:26px;flex-shrink:0}
+#work .story-company-website{min-width:0;min-height:0;overflow:hidden;background:#d7d7d5}
+.site.ref-mode #work .story-company-website img{display:block;width:100%;height:100%;object-fit:cover;object-position:left top;filter:grayscale(1);background:#d7d7d5}
+.site.ref-mode #work .story-controls{display:flex;flex-direction:column;gap:18px;left:var(--page-gutter,5.3vw);right:auto;top:36%;bottom:auto;z-index:10;width:64px}
+#work .story-controls button{width:64px;height:76px;min-height:64px;padding:10px;border-radius:0;border:0;background:transparent;color:#e7e7e4;display:grid;place-items:center;transition:opacity .2s,transform .2s}
+#work .story-controls button .ui-arrow{width:44px;height:52px}
+#work .story-controls button:hover{background:transparent;color:#fff;transform:translateY(-3px)}#work #storyNext:hover{transform:translateY(3px)}#work .story-controls button:disabled{opacity:.22;cursor:default;transform:none}
+.site.ref-mode #work .story-caption{display:flex;justify-content:center;align-items:center;left:0;right:0;bottom:38px;z-index:10}
+#work .work-archive-link{display:flex;align-items:center;justify-content:space-between;gap:60px;width:min(460px,70%);min-height:66px;padding:20px 26px;margin:0;border:1px solid #80817e;background:#0b0c0c;color:#eaeae7;font:13px/1.3 var(--sans);letter-spacing:.08em;transition:background .2s,color .2s}
+#work .work-archive-link .ui-arrow{width:27px;height:27px}#work .work-archive-link:hover{background:#e8e8e5;color:#111}
+@media(max-width:1050px) and (min-width:721px){
+ #work .story-layer{grid-template-columns:38% 62%}#work .story-company-info{padding:24px}#work .story-company-brief{font-size:17px;margin:22px 0 13px}#work .story-company-role{font-size:31px;margin-bottom:22px}#work .story-company-case{font-size:10px;padding:13px;min-height:56px}
+ .site.ref-mode #work .story-controls{left:2%;width:50px}#work .story-controls button{width:50px}
+}
+@media(max-width:720px){
+ .mobile-actual .site.ref-mode #work .story-frame{padding:7px;border-radius:17px}
+ .mobile-actual .site.ref-mode #work .story-screens{aspect-ratio:.64;border-radius:10px}
+ #work .story-layer{grid-template-columns:1fr;grid-template-rows:56% 44%}
+ #work .story-company-info{padding:19px;display:grid;grid-template-columns:1fr;grid-template-rows:44px auto auto 44px;gap:10px;align-content:space-between}
+ .mobile-actual .site.ref-mode #work .story-company-logo{height:44px;max-height:44px;max-width:145px;width:auto;object-position:left center;margin:0;object-fit:contain;background:transparent}
+ #work .story-company-brief{font:14px/1.35 Georgia,serif;margin:0;max-width:none}
+ #work .story-company-role{font-size:25px;line-height:1;margin:0;max-width:none;text-wrap:pretty}
+ #work .story-company-case{min-height:44px;padding:10px 12px;font-size:10px;letter-spacing:.035em;margin:0;gap:10px}
+ #work .story-company-case .ui-arrow{width:23px;height:23px}
+ .mobile-actual .site.ref-mode #work .story-company-website img{object-fit:cover;object-position:left top;background:#d7d7d5}
+ .mobile-actual .site.ref-mode #work .story-controls{left:4px;right:auto;top:29%;bottom:auto;width:44px;gap:16px}
+ #work .story-controls button{width:44px;height:60px;min-height:44px;padding:5px}#work .story-controls button .ui-arrow{width:35px;height:44px}
+ .mobile-actual .site.ref-mode #work .story-caption{left:6%;right:6%;bottom:40px;display:flex;gap:0}
+ #work .work-archive-link{width:100%;min-height:60px;padding:18px 20px;font-size:12px;gap:25px}
+}
+@media(max-height:650px) and (min-width:721px){
+ .site.ref-mode #work .story-screens{aspect-ratio:1.9}
+ #work .story-company-info{padding:18px}.site.ref-mode #work .story-company-logo{height:40px}
+ #work .story-company-brief{font-size:14px;margin:14px 0 10px}#work .story-company-role{font-size:25px;margin-bottom:14px}#work .story-company-case{min-height:46px;padding:10px 12px;font-size:10px}
+ .site.ref-mode #work .story-caption{bottom:20px}#work .work-archive-link{min-height:52px;padding:13px 22px}
+}
+@media(prefers-reduced-motion:reduce){#work .story-company-case,#work .story-controls button,#work .work-archive-link{transition:none}}
+
+/* Crop the Setevie homepage header out of the right-hand image. */
+.site.ref-mode #work .story-company-website img[src$="setevie-spread.png"]{height:118%;transform:translateY(-15.254237%);object-position:left top}
+
+/* Reuse the approved CYCLE wordmark on the white information panel. */
+.site.ref-mode #work .story-company-logo[src$="cycle-logo.svg"]{filter:invert(1)}
