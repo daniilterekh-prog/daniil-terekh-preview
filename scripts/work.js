@@ -49,12 +49,13 @@ function measureStory(){
  const endLeft=mobile?stageW-targetW-stageW*.055:(stageW-targetW)/2+28;
  const startTop=mobile?stageH*.235:stageH*.06;
  const endTop=mobile?stageH*.09:stageH*.095;
- // Keep the entering device below the name and slogan, including short screens.
- const previousClearance=parseFloat(section.style.getPropertyValue('--story-clearance'))||0;
- const naturalTop=section.getBoundingClientRect().top+scrollY-previousClearance;
+ // Follow the compact Hero content instead of leaving a viewport-sized gap.
+ const previousOffset=parseFloat(section.style.getPropertyValue('--story-offset'))||0;
+ const naturalTop=section.getBoundingClientRect().top+scrollY-previousOffset;
  const heroBottom=Math.max(byId('heroName').getBoundingClientRect().bottom,document.querySelector('#hero .signature').getBoundingClientRect().bottom)+scrollY;
- const clearance=Math.max(0,Math.ceil(heroBottom+32-naturalTop-startTop+initialW*.1));
- if(clearance!==previousClearance)section.style.setProperty('--story-clearance',clearance+'px');
+ const minimumOffset=heroBottom+32-naturalTop-startTop+initialW*.1;
+ const offset=Math.ceil(minimumOffset>0?minimumOffset:Math.min(0,minimumOffset+32));
+ if(offset!==previousOffset)section.style.setProperty('--story-offset',offset+'px');
  const top=section.getBoundingClientRect().top+window.scrollY;
  const start=top-stageTop;
  lastPaintLocal=null;
@@ -79,7 +80,7 @@ function paintStory(){
  byId('storyControls').style.opacity=metaOpacity;
  byId('storyControls').style.pointerEvents=metaOpacity>.85?'auto':'none';
  byId('storyCaption').inert=metaOpacity<=.85;byId('storyControls').inert=metaOpacity<=.85;
- frame.inert=metaOpacity<=.75;
+ // The visible card stays interactive during entry; inactive layers remain inert.
  byId('storyAmbient').style.opacity=clamp((enter-.15)/.65)*.93;
  // All images enter from the BOTTOM, one after another. Scrolling up reverses the motion.
  const layers=track.children;let activeIndex=0;
@@ -94,7 +95,6 @@ function paintStory(){
  if(activeIndex!==active)setActive(activeIndex);
  byId('storyPrev').disabled=activeIndex===0;
  byId('storyNext').disabled=activeIndex>=companies.length-1;
- frame.style.pointerEvents=metaOpacity>.75?'auto':'none';
 }
 function setActive(i){
  active=i;const c=companies[i];

@@ -1,5 +1,5 @@
 /* Case context, contact paths and responsive scene spacing. */
-.site.ref-mode .scroll-experience{margin-top:calc(100svh - 66.6657cqw - var(--hero-air) - 152px + var(--story-clearance,0px))}
+.site.ref-mode .scroll-experience{margin-top:calc(100svh - 66.6657cqw - var(--hero-air) - 152px + var(--story-offset,0px))}
 .case-visual-note{font:12px/1.6 var(--sans);color:#b5b6b1;max-width:800px;margin:18px 0 0}
 .case-facts .case-recognition{grid-column:1/-1;border-block:1px solid #444;padding:0;margin-top:8px}
 .case-recognition summary{cursor:pointer;padding:22px 0;font:15px/1.5 var(--sans);color:#d4d5cf;min-height:64px}
@@ -27,7 +27,7 @@
 .proof-journey span+span::before{content:'↓';display:block;margin-bottom:8px;color:#666;font:14px/1 var(--sans)}
 .proof-sheet .proof-sheet-bottom small{font-size:8px;letter-spacing:.06em}
 @media(max-width:720px){
- .mobile-actual .site.ref-mode .scroll-experience{margin-top:calc(76.5svh - 597px - 39cqw + var(--story-clearance,0px))!important}
+ .mobile-actual .site.ref-mode .scroll-experience{margin-top:calc(76.5svh - 597px - 39cqw + var(--story-offset,0px))!important}
  .contact-intents{grid-template-columns:1fr;gap:2px;max-width:420px}
  .contact-intents a{padding:18px 0;min-height:94px}
  .contact-intents a>span{font-size:23px}
