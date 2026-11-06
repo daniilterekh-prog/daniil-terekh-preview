@@ -40,7 +40,7 @@
 .proof-sheet-note>em{font-style:normal}
 .proof-note-marker{font:52px/1 ThinkingNarrow,Impact,sans-serif;display:block;margin-top:32px;color:#343434}
 .proof-journey{display:grid;gap:12px;margin-top:24px;font:20px/1.2 ThinkingNarrow,Impact,sans-serif;text-align:left}
-.proof-journey span+span::before{content:'↓';display:block;margin-bottom:8px;color:#666;font:14px/1 var(--sans)}
+.proof-journey .ui-arrow{display:block;margin-bottom:8px;color:#666;font-size:14px}
 .proof-sheet .proof-sheet-bottom small{font-size:8px;letter-spacing:.06em}
 @media(max-width:720px){
  .mobile-actual .site.ref-mode .scroll-experience{margin-top:calc(76.5svh - 597px - 39cqw + var(--story-offset,0px))!important}

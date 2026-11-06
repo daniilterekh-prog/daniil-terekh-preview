@@ -30,7 +30,8 @@ function renderScreens(){
   if(highlights.length){
    layer.classList.add('has-recognition');
    const recognition=element('a','story-recognition');recognition.href='#experience/'+c.id;recognition.setAttribute('aria-label','View all '+c.awards.length+' recognition entries for '+c.name);
-   const heading=element('span','story-recognition-heading');heading.append(element('span','','Company recognition'),element('span','','All '+c.awards.length+' ↗'));
+   const more=element('span','','All '+c.awards.length+' ');more.insertAdjacentHTML('beforeend',arrow);
+   const heading=element('span','story-recognition-heading');heading.append(element('span','','Company recognition'),more);
    const items=element('span','story-recognition-items');
    for(const featured of highlights){
     const award=c.awards[featured.index],item=element('span','story-recognition-item');

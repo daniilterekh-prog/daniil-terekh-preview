@@ -139,7 +139,9 @@
   const story=$('solution');if(story.dataset.skill!==(item?.name||'')){story.dataset.skill=item?.name||'';story.getAnimations().forEach(a=>a.cancel());if(!media.matches&&!manualReduced)story.animate([{opacity:0,transform:'perspective(900px) rotateY(-12deg) translateX(12px)'},{opacity:1,transform:'none'}],{duration:480,easing:'cubic-bezier(.2,.7,.2,1)'});}
   $('count').textContent=state.items.length+' CAPABILITIES';
   $('empty').hidden=!!visible.length;$('task-controls').hidden=state.variant!==6;$('task-controls').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.task===state.task)));
-  $('zoom-controls').hidden=state.variant!==9;$('breadcrumb').textContent='ALL SKILLS / '+(item?M.categories[item.category].toUpperCase()+' / '+item.name.toUpperCase():'NO RESULTS');$('overview').textContent=state.overview?'Приблизить выбранный ↙':'Весь пласт ↗︎';
+  $('zoom-controls').hidden=state.variant!==9;$('breadcrumb').textContent='ALL SKILLS / '+(item?M.categories[item.category].toUpperCase()+' / '+item.name.toUpperCase():'NO RESULTS');
+  const overviewPath=state.overview?'M19 5 5 19M5 5v14h14':'M5 19 19 5M5 5h14v14';
+  $('overview').innerHTML=(state.overview?'Приблизить выбранный ':'Весь пласт ')+'<svg class="ui-arrow" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none"><path d="'+overviewPath+'" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   miniNodes.forEach((b,slot)=>{const i=slotItems.has(slot)?slotItems.get(slot):-1;b.disabled=i<0||!visibleSet.has(i);b.setAttribute('aria-pressed',String(i>=0&&i===state.selected));});
  }
  function motion(){const reduced=manualReduced||media.matches;root.classList.toggle('no-motion',reduced);$('motion').setAttribute('aria-pressed',String(reduced));$('motion').textContent=media.matches?'System motion preference':manualReduced?'Enable motion':'Reduce motion';$('motion').disabled=media.matches;}
