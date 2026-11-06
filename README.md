@@ -2,10 +2,10 @@
 
 Daniil Terekh / CYCLE — website preview.
 
-[Посмотреть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/) · [Кейс BARNES с видео](https://daniilterekh-prog.github.io/daniil-terekh-preview/#experience/barnes)
+[Посмотреть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=services-in-place-v50) · [How can I help](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=services-in-place-v50#services) · [Кейс BARNES](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=services-in-place-v50#experience/barnes)
 
-Обновлено 6 ноября 2026 по просьбе владельца дать ссылку на новую версию. Сборка из `website/site/dist`, source commit `7a41b55d69d703024b67c240f867ddc802a23e22`: широкое видео-херо вместо планшета внутри кейса BARNES, заметные кнопки OPEN CASE и проверенные исправления навигации. Приватные документы и исходный архив сюда не копируются.
+Обновлено 6 ноября 2026 по просьбе владельца. Сборка `website/site/dist`, source commit `80c3dd7ea1c64450022ec840d860a07778b2e20a`: выбранная услуга увеличивается в своей строке, сохраняя порядок списка. В сборке также сохранены широкое видео-херо BARNES, кнопки OPEN CASE и проверенные исправления навигации. Приватные документы и исходный архив сюда не копируются.
 
 Фильм загружается после нажатия PLAY BRAND FILM с официального публичного адреса https://barn-estate.ru/upload/barnes.mp4; в репозитории хранится только постер.
 
-Предыдущая версия с фильмом ниже планшета доступна в истории Git (`c8c2dfcaf3baaedb7d15ac833e8ea222cc3b8549`).
+Предыдущая версия доступна в истории Git (`ae6fd550de2339a64fbc419a2af656a48fa37dd3`).
