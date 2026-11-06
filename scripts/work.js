@@ -53,8 +53,8 @@ function measureStory(){
  const previousOffset=parseFloat(section.style.getPropertyValue('--story-offset'))||0;
  const naturalTop=section.getBoundingClientRect().top+scrollY-previousOffset;
  const heroBottom=Math.max(byId('heroName').getBoundingClientRect().bottom,document.querySelector('#hero .signature').getBoundingClientRect().bottom)+scrollY;
- const minimumOffset=heroBottom+32-naturalTop-startTop+initialW*.1;
- const offset=Math.ceil(minimumOffset>0?minimumOffset:Math.min(0,minimumOffset+32));
+ const heroGap=mobile?24:40;
+ const offset=Math.ceil(heroBottom+heroGap-naturalTop-startTop+initialW*.04);
  if(offset!==previousOffset)section.style.setProperty('--story-offset',offset+'px');
  const top=section.getBoundingClientRect().top+window.scrollY;
  const start=top-stageTop;

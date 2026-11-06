@@ -1,15 +1,15 @@
 # Daniil Terekh — website preview
 
-[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=practice-layout-v61#home) · [Skills](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=practice-layout-v61#skills) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=practice-layout-v61#services)
+[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=hero-tablet-v62#home) · [Skills](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=hero-tablet-v62#skills) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=hero-tablet-v62#services)
 
-Обновлено 6 ноября 2026 по поручению владельца. Source commit `5bb4ee0294481a9656d30d1fce4487a44ac6fcf4`, сборка `website/site/dist`.
+Обновлено 6 ноября 2026 по поручению владельца. Source commit `4f850d8cc8fd0d20c4d06af450653130d07f475c`, сборка `website/site/dist`.
 
-В In Practice убрана соединительная линия с точкой между пунктами и папкой. Правая композиция опущена и выровнена по центру левой колонки. [Открыть блок](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=practice-layout-v61#evidence).
+В In Practice убрана соединительная линия с точкой между пунктами и папкой. Правая композиция опущена и выровнена по центру левой колонки. [Открыть блок](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=hero-tablet-v62#evidence).
 
-Первый экран по запросу владельца оставлен только с именем и исходным слоганом. Дополнительные тексты, кнопки и подпись BARNES убраны. Верхняя навигация сохранена. Планшет поднят ближе к имени и слогану; видимая кнопка первого кейса доступна уже при появлении устройства.
+Первый экран по запросу владельца оставлен только с именем и исходным слоганом. Дополнительные тексты, кнопки и подпись BARNES убраны. Верхняя навигация сохранена. Планшет дополнительно поднят, чтобы больше кейса попадало в Hero; видимая кнопка первого кейса доступна уже при появлении устройства.
 
 Убран повторный стоп на Skills и хвост под серыми карточками. Быстрые последовательные жесты продолжают движение, инерция одного жеста не пропускает сцены. Длинные панели остаются читаемыми; статичные кадры линзы больше не перерисовываются постоянно. Сохранены равные сценарии проекта и руководящей роли в услугах и контактах, кейсы и видео BARNES.
 
 Фильм запрашивается только после нажатия Play с официального источника https://barn-estate.ru/upload/barnes.mp4. Приватные исходники, материалы аудита и архив в этот репозиторий не копируются.
 
-Предыдущая опубликованная версия: `898c244` в истории Git.
+Предыдущая опубликованная версия: `aa2a4a0` в истории Git.
