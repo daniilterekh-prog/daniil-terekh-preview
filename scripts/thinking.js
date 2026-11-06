@@ -11,20 +11,20 @@
  const morph=document.createElement('canvas');morph.className='signal-morph';morph.setAttribute('aria-hidden','true');visual.append(morph);
  const context=morph.getContext('2d');
  const sources=[original[3],original[1],original[18]],goals=['ATTRACT QUALIFIED CLIENTS.','FIX THE JOURNEY FIRST.','TEST. MEASURE. SCALE.'];
- let visible=false,scrollDirty=true,sceneFrame=0,lastTime=0,clock=0,progress=0,state=model.flightState(0),width=0,height=0,targets=[];
+ let visible=false,scrollDirty=true,sceneFrame=0,lastTime=0,clock=0,progress=0,state=model.flightState(0),width=0,height=0,targets=[],fragments=[],sourceRows=[];
  function resizeMorph(){glyphMetrics.clear();const r=visual.getBoundingClientRect();width=r.width;height=r.height;const dpr=Math.min(devicePixelRatio||1,2,Math.max(1,Math.sqrt(8000000/(width*height))));morph.width=Math.round(width*dpr);morph.height=Math.round(height*dpr);if(context){context.setTransform(dpr,0,0,dpr,0,0);layoutClarity();}paint();}
  const glyphMetrics=new Map();
  function textMetrics(text,font){
   const key=font+"\n"+text;
   if(!glyphMetrics.has(key)){
    context.font=font;
-   glyphMetrics.set(key,{width:context.measureText(text).width,offsets:Array.from(text,(_,i)=>context.measureText(text.slice(0,i)).width)});
+   glyphMetrics.set(key,{width:context.measureText(text).width,offsets:Array.from(text,(_,i)=>context.measureText(text.slice(0,i)).width),advances:Array.from(text,char=>context.measureText(char).width)});
   }
   return glyphMetrics.get(key);
  }
- function textPositions(text,font,y,center=width*.5){
-  const metrics=textMetrics(text,font),start=center-metrics.width/2;
-  return Array.from(text).map((char,i)=>({char,x:start+metrics.offsets[i],y}));
+ function textPositions(text,font,y,center=width*.5,spacing=0){
+  const metrics=textMetrics(text,font),start=center-(metrics.width+text.length*spacing)/2;
+  return Array.from(text).map((char,i)=>({char,x:start+metrics.offsets[i]+i*spacing+metrics.advances[i]/2,y,half:metrics.advances[i]/2}));
  }
  function layoutClarity(){
   if(!width||!height)return;
@@ -44,29 +44,58 @@
   targets=rows.map(r=>({size:r.size*scale,baseline:r.y+(r.ascent-r.descent-r.size)*scale/2,center:lens.cx}));
   clarity.style.setProperty('--clarity-main-size',targets[0].size+'px');
   clarity.style.setProperty('--clarity-small-size',targets[1].size+'px');
+  layoutFragments();
+ }
+ function layoutFragments(){
+  const sourceSize=Math.min(width<600?23:36,width*.06);
+  fragments=[];sourceRows=[];
+  for(let group=0;group<3;group++){
+   const fitted=sourceSize*Math.min(1,width*.88/textMetrics(sources[group],sourceSize+'px Georgia').width);
+   const font=fitted+'px Georgia',targetFont='700 '+targets[group].size+'px ThinkingNarrow';
+   const y=height*(.34+group*.17);
+   // Match the final DOM text's -.01em tracking before handing it back to HTML.
+   const src=textPositions(sources[group],font,y),dst=textPositions(goals[group],targetFont,targets[group].baseline,targets[group].center,-targets[group].size*.01);
+   const count=Math.max(src.length,dst.length);
+   sourceRows.push({font,y});
+   for(let index=0;index<count;index++){
+    const empty={char:'',x:width*.5,y:height*.53,half:0};
+    fragments.push({a:src[index]||empty,b:dst[index]||empty,font,targetFont,path:model.fragmentPath(index,count,group)});
+   }
+  }
+  // Far letters paint first. No sorting, font fitting or text measurement per frame.
+  fragments.sort((a,b)=>a.path.depth-b.path.depth);
  }
  function ellipse(ctx,x,y,rx,ry){ctx.beginPath();ctx.ellipse(x,y,Math.max(1,rx),Math.max(1,ry),0,0,Math.PI*2);}
  function drawGlass(){
   const ctx=context,{cx,cy,rx,ry,depth,zoom,retreat}=model.glassGeometry(width,height,progress);
-  ctx.save();ctx.globalAlpha=1-retreat*.87;ctx.lineJoin='round';ctx.lineCap='round';
+  const passage=model.smooth(.4,.58,progress)*(1-model.smooth(.8,.95,progress));
+  // Once the camera is inside the glass, its rim and bevels are offscreen.
+  // Avoid rasterizing an enormous clipped ellipse and shadow outside the canvas.
+  const margin=depth+24;
+  const fillsView=[-margin,width+margin].every(x=>[-margin,height+margin].every(y=>((x-cx)/rx)**2+((y-cy)/ry)**2<1));
+  ctx.save();ctx.globalAlpha=(1-retreat*.87)*(1-passage*.62);ctx.lineJoin='round';ctx.lineCap='round';
   // A broad caustic and a cut glass edge retain volume at every camera angle.
   const aura=ctx.createRadialGradient(cx,cy,0,cx,cy,ry*1.3);
   aura.addColorStop(0,'#c8d0ce10');aura.addColorStop(.6,'#c8d0ce05');aura.addColorStop(1,'#c8d0ce00');
   ctx.fillStyle=aura;ctx.fillRect(0,0,width,height);
   const edge=ctx.createLinearGradient(cx-rx-depth,cy-ry,cx+rx+depth,cy+ry);
   [[0,'#e8eeed'],[.12,'#525c5c'],[.33,'#151d1e'],[.5,'#9da8a8'],[.67,'#202728'],[.9,'#dae0df'],[1,'#4b5655']].forEach(([n,c])=>edge.addColorStop(n,c));
-  ellipse(ctx,cx+depth,cy,rx,ry);ctx.strokeStyle=edge;ctx.lineWidth=Math.max(2,depth*.38);ctx.stroke();
+  if(!fillsView){ellipse(ctx,cx+depth,cy,rx,ry);ctx.strokeStyle=edge;ctx.lineWidth=Math.max(2,depth*.38);ctx.stroke();}
   const glass=ctx.createLinearGradient(cx-rx,cy,cx+rx,cy);
   [[0,'#dce7e23d'],[.08,'#a8b9b126'],[.28,'#151d1b75'],[.64,'#dce6e60c'],[.88,'#dce6e630'],[1,'#f3f7f45c']].forEach(([n,c])=>glass.addColorStop(n,c));
-  ellipse(ctx,cx,cy,rx,ry);ctx.fillStyle=glass;ctx.fill();ctx.strokeStyle=edge;ctx.lineWidth=1.7;ctx.stroke();
-  // Two soft bevels keep the edge clean when the camera approaches the glass.
-  for(let i=1;i<=2;i++){const inset=i*1.4*Math.sqrt(zoom);ellipse(ctx,cx+depth*.12,cy,rx-inset,ry-inset);ctx.strokeStyle='rgba(219,231,226,'+(.12-i*.035)+')';ctx.lineWidth=.8;ctx.stroke();}
-  ctx.save();ellipse(ctx,cx,cy,rx-2,ry-2);ctx.clip();
+  ctx.fillStyle=glass;
+  if(fillsView)ctx.fillRect(0,0,width,height);
+  else{
+   ellipse(ctx,cx,cy,rx,ry);ctx.fill();ctx.strokeStyle=edge;ctx.lineWidth=1.7;ctx.stroke();
+   // Two soft bevels keep the edge clean when the camera approaches the glass.
+   for(let i=1;i<=2;i++){const inset=i*1.4*Math.sqrt(zoom);ellipse(ctx,cx+depth*.12,cy,rx-inset,ry-inset);ctx.strokeStyle='rgba(219,231,226,'+(.12-i*.035)+')';ctx.lineWidth=.8;ctx.stroke();}
+  }
+  ctx.save();if(!fillsView){ellipse(ctx,cx,cy,rx-2,ry-2);ctx.clip();}
   const reflection=ctx.createLinearGradient(cx-rx,cy-ry,cx+rx,cy+ry);
   reflection.addColorStop(0,'#ffffff00');reflection.addColorStop(.18,'#ffffff03');reflection.addColorStop(.42,'#edf6f32b');reflection.addColorStop(.7,'#ffffff03');reflection.addColorStop(1,'#ffffff00');
-  ctx.fillStyle=reflection;ctx.fillRect(cx-rx,cy-ry,rx*2,ry*2);
+  ctx.fillStyle=reflection;ctx.fillRect(Math.max(0,cx-rx),Math.max(0,cy-ry),Math.min(width,rx*2),Math.min(height,ry*2));
   ctx.restore();
-  ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,Math.PI*.96,Math.PI*1.53);ctx.strokeStyle='#eef5f0bd';ctx.lineWidth=1.6;ctx.shadowColor='#e4efe8';ctx.shadowBlur=9;ctx.stroke();
+  if(!fillsView){ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,Math.PI*.96,Math.PI*1.53);ctx.strokeStyle='#eef5f0bd';ctx.lineWidth=1.6;ctx.shadowColor='#e4efe8';ctx.shadowBlur=9;ctx.stroke();}
   ctx.restore();
  }
  function drawOverview(){
@@ -103,36 +132,44 @@
   if(!context)return;
   const ctx=context;ctx.clearRect(0,0,width,height);drawGlass();drawOverview();
   ctx.globalAlpha=1;
-  if(state.focus<.001)return;
-  const sourceSize=Math.min(width<600?23:36,width*.06);
-  const targetSize=targets[0]?.size||Math.min(width<600?32:68,width*.085);
-  const split=model.smooth(.38,.58,progress),assemble=model.smooth(.65,.92,progress);
-  for(let g=0;g<3;g++){
-   context.font=sourceSize+'px Georgia';const fitted=sourceSize*Math.min(1,width*.88/textMetrics(sources[g],sourceSize+'px Georgia').width);
-   const sourceFont=fitted+'px Georgia',targetFont='700 '+(g===0?targetSize:targetSize*.72)+'px ThinkingNarrow';
-   const src=textPositions(sources[g],sourceFont,height*(.34+g*.17));
-   const dst=textPositions(goals[g],targetFont,targets[g]?.baseline||height*(.4+g*.17),targets[g]?.center||width*.51);
-   const n=Math.max(src.length,dst.length);
-   for(let i=0;i<n;i++){
-    const a=src[i]||{char:'',x:width*.5,y:height*.51},b=dst[i]||{char:'',x:width*.5,y:height*.51};
-    // Interleave the three phrases across one airy ellipse, avoiding clumps.
-    const particle=i*3+g,angle=particle*2.399963,r=Math.sqrt((particle+.5)/(n*3));
-    const cloudX=width*.5+Math.cos(angle)*r*width*.38,cloudY=height*.51+Math.sin(angle)*r*height*.27;
-    let x=a.x+(cloudX-a.x)*split,y=a.y+(cloudY-a.y)*split;
-    x+=(b.x-x)*assemble;y+=(b.y-y)*assemble;
-    ctx.save();ctx.translate(x,y);
-    const rotation=state.scatter*Math.sin(i*2.1)*.38*(1-assemble);ctx.rotate(rotation);
-    const dissolve=(i%4===0?state.scatter*.85:state.scatter*.3);
-    ctx.globalAlpha=state.focus*(1-dissolve);
-    ctx.fillStyle='#e2e5e0';ctx.shadowBlur=0;
-    const ink=ctx.globalAlpha,change=model.smooth(.12+(i%7)*.035,.53+(i%7)*.035,assemble);
-    // Exchange alphabets through a short dissolve, never two superimposed glyphs.
-    ctx.font=(fitted*(1-state.scatter*.18))+'px Georgia';
-    ctx.globalAlpha=ink*(1-model.smooth(0,.48,change));ctx.fillText(a.char,0,0);
-    ctx.font='700 '+((g===0?targetSize:targetSize*.72)*(1-state.scatter*.42))+'px ThinkingNarrow';
-    ctx.globalAlpha=ink*model.smooth(.52,1,change);ctx.fillText(b.char,0,0);ctx.restore();
+  const presence=model.smooth(.18,.3,progress)*(1-state.result);
+  if(presence<.001)return;
+  if(media.matches){
+   // A readable cut between complete phrases replaces the burst in reduced motion.
+   ctx.save();ctx.globalAlpha=presence;ctx.textAlign='center';ctx.fillStyle='#edf0eb';
+   for(let group=0;group<3;group++){
+    const goal=progress>=.5;
+    ctx.font=goal?'700 '+targets[group].size+'px ThinkingNarrow':sourceRows[group].font;
+    ctx.fillText(goal?goals[group]:sources[group],goal?targets[group].center:width*.5,goal?targets[group].baseline:sourceRows[group].y);
    }
+   ctx.restore();return;
   }
+  for(const fragment of fragments){
+   const {a,b,font,targetFont,path}=fragment,motion=model.fragmentState(progress,path);
+   const point=fragmentPoint(fragment,motion),ink=presence*motion.opacity;
+   const sourceInk=1-model.smooth(0,.48,motion.change),targetInk=model.smooth(.52,1,motion.change);
+   // A single faint shutter echo on the closest letters, only during the impulse.
+   // It is progress-based (not frame history), so reverse scroll stays identical.
+   if(motion.trail>.08&&sourceInk>.01&&a.char.trim()){
+    const previous=model.fragmentState(progress-.006,path),echo=fragmentPoint(fragment,previous);
+    drawFragment(a,font,echo,previous,ink*sourceInk*motion.trail*.2);
+   }
+   if(sourceInk>.001&&a.char.trim())drawFragment(a,font,point,motion,ink*sourceInk);
+   if(targetInk>.001&&b.char.trim())drawFragment(b,targetFont,point,motion,ink*targetInk);
+  }
+ }
+ function fragmentPoint({a,b},motion){
+  const originX=a.x+(width*.5-a.x)*motion.compression;
+  const originY=a.y+(height*.53-a.y)*motion.compression;
+  let x=originX+(width*(.5+motion.x*.4)-originX)*motion.release;
+  let y=originY+(height*(.53+motion.y*.27)-originY)*motion.release;
+  x+=(b.x-x)*motion.gather;y+=(b.y-y)*motion.gather;
+  return {x,y};
+ }
+ function drawFragment(glyph,font,point,motion,alpha){
+  context.save();context.translate(point.x,point.y);context.rotate(motion.rotation);context.scale(motion.scale,motion.scale);
+  context.globalAlpha=alpha;context.fillStyle='#edf0eb';context.font=font;
+  context.fillText(glyph.char,-glyph.half,0);context.restore();
  }
  function setPhrase(phrase,copy){
   const fragment=document.createDocumentFragment(),glyphs=[];
