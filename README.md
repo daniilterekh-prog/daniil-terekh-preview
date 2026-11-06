@@ -1,8 +1,10 @@
 # Daniil Terekh — website preview
 
-[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=tablet-position-v60#home) · [Skills](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=tablet-position-v60#skills) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=tablet-position-v60#services)
+[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=practice-layout-v61#home) · [Skills](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=practice-layout-v61#skills) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=practice-layout-v61#services)
 
-Обновлено 6 ноября 2026 по поручению владельца. Source commit `ba200bf8bb096ab137425946087ed03c4f602410`, сборка `website/site/dist`.
+Обновлено 6 ноября 2026 по поручению владельца. Source commit `5bb4ee0294481a9656d30d1fce4487a44ac6fcf4`, сборка `website/site/dist`.
+
+В In Practice убрана соединительная линия с точкой между пунктами и папкой. Правая композиция опущена и выровнена по центру левой колонки. [Открыть блок](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=practice-layout-v61#evidence).
 
 Первый экран по запросу владельца оставлен только с именем и исходным слоганом. Дополнительные тексты, кнопки и подпись BARNES убраны. Верхняя навигация сохранена. Планшет поднят ближе к имени и слогану; видимая кнопка первого кейса доступна уже при появлении устройства.
 
@@ -10,4 +12,4 @@
 
 Фильм запрашивается только после нажатия Play с официального источника https://barn-estate.ru/upload/barnes.mp4. Приватные исходники, материалы аудита и архив в этот репозиторий не копируются.
 
-Предыдущая опубликованная версия: `d33a80d` в истории Git.
+Предыдущая опубликованная версия: `898c244` в истории Git.
