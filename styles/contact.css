@@ -1,0 +1,47 @@
+/* One contact sheet, shared by the homepage, services and case studies. */
+html.connect-open,html.connect-open body{overflow:hidden}
+.connect-dialog{width:min(880px,calc(100vw - 48px));max-height:calc(100dvh - 48px);margin:auto;padding:0;border:1px solid #b5b6ad;border-radius:0;background:#efefe9;color:#181916;color-scheme:light;overflow:auto;overscroll-behavior:contain;box-shadow:0 24px 100px #0007;font-family:Arial,sans-serif}
+.connect-dialog::backdrop{background:#000b;backdrop-filter:blur(7px)}
+.connect-dialog *{box-sizing:border-box}
+.connect-top{display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:1;background:#efefe9;padding:12px 24px;border-bottom:1px solid #b7b8af}
+.connect-top>span{font-size:10px;letter-spacing:.12em}
+.connect-close{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:44px;min-width:44px;padding:10px 0 10px 14px;border:0;background:transparent;color:inherit;font:12px/1.3 Arial,sans-serif;cursor:pointer}
+.connect-close svg{width:20px;height:20px}
+.connect-content{padding:38px 40px 32px;text-align:center}
+.connect-content h2{font:clamp(52px,7.5vw,96px)/.95 ThinkingNarrow,Impact,sans-serif;letter-spacing:-.025em;margin:0}
+.connect-description{font:21px/1.4 Georgia,serif;margin:18px 0 0}
+.connect-context{display:inline-block;margin:14px 0 0;padding:7px 10px;border:1px solid #a6a79e;font:11px/1.45 Arial,sans-serif;max-width:100%;overflow-wrap:anywhere}
+.connect-context[hidden]{display:none}
+.connect-methods{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:34px 0 26px}
+.connect-method{flex:0 0 calc((100% - 48px)/5);min-width:0;min-height:124px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:18px 8px;border:1px solid #aaaBA2;background:transparent;color:#20211d;text-decoration:none;font:14px/1.3 Arial,sans-serif}
+.connect-method svg{width:30px;height:30px;flex:none}
+.connect-method small{font-size:10px;line-height:1.4}
+.connect-method:disabled{color:#73756c;border-color:#c5c6bc;cursor:default}
+.connect-method:disabled small{color:#64665e}
+.connect-method-email{background:#1a1b18;border-color:#1a1b18;color:#f4f4ef}
+.connect-method-email:hover{background:#3a3c34;border-color:#3a3c34}
+.connect-email-address{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 18px;font-size:12px;line-height:1.5}
+.connect-email-address a{color:inherit;text-underline-offset:4px;overflow-wrap:anywhere;min-height:44px;display:inline-flex;align-items:center}
+.connect-email-address button{min-height:44px;padding:10px 0;border:0;background:transparent;color:inherit;text-decoration:underline;text-underline-offset:4px;cursor:pointer;font:inherit}
+.connect-copy-status{font-size:12px;line-height:1.5;margin:0;min-height:18px;color:#51534c}
+.connect-dialog :is(a,button):focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.connect-dialog .connect-method-email:focus-visible{outline-color:#181916}
+@media(max-width:590px){
+ .connect-dialog{width:calc(100vw - 24px);max-height:calc(100dvh - 24px)}
+ .connect-top{padding:8px 16px}
+ .connect-top>span{font-size:9px;letter-spacing:.06em}
+ .connect-content{padding:28px 20px 22px}
+ .connect-content h2{font-size:clamp(44px,12vw,64px)}
+ .connect-description{font-size:19px;margin-top:14px}
+ .connect-methods{gap:10px;margin:24px 0 18px}
+ .connect-method{flex-basis:calc((100% - 20px)/3);min-height:112px;font-size:12px;padding:14px 4px;gap:10px}
+ .connect-method svg{width:27px;height:27px}
+ .connect-method small{font-size:9px}
+}
+@media(max-height:500px) and (min-width:591px){
+ .connect-content{padding:18px 24px}
+ .connect-content h2{font-size:52px}
+ .connect-description{margin-top:10px;font-size:18px}
+ .connect-methods{margin:18px 0 10px}
+ .connect-method{min-height:100px;padding:12px 8px;gap:8px}
+}
