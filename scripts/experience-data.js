@@ -435,7 +435,8 @@
     "location": "Saint Petersburg · Multi-project agency",
     "sector": "Marketing agency",
     "tags": "TEAM / STRATEGY / OPERATIONS",
-    "image": "assets/companies/setevie-home.jpg",
+    "image": "assets/companies/setevie-hero-v74.jpg",
+    "imageAlt": "Setevie — company website hero with architectural photography",
     "url": "https://setevie.com/",
     "headline": "Bring the team around the outcome.",
     "summary": "Team leadership, media planning and performance oversight across agency projects.",
@@ -469,7 +470,8 @@
     ],
     "collaboration": "Led a multidisciplinary digital team and coordinated delivery with clients and project stakeholders.",
     "logo": "assets/companies/setevie-logo.svg",
-    "homepageScreen": "assets/companies/setevie-spread.png",
+    "homepageScreen": "assets/companies/setevie-architecture-v74.jpg",
+    "homepageAlt": "Setevie — architectural detail from the company website",
     "companyBrief": "Marketing agency specialising in property and development.",
     "awards": [
       {

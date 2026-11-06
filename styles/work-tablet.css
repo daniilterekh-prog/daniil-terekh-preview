@@ -57,8 +57,8 @@
 }
 @media(prefers-reduced-motion:reduce){#work .story-company-case,#work .story-controls button,#work .work-archive-link{transition:none}}
 
-/* Crop the Setevie homepage header out of the right-hand image. */
-.site.ref-mode #work .story-company-website img[src$="setevie-spread.png"]{height:118%;transform:translateY(-15.254237%);object-position:left top}
+/* Dedicated source-site architectural capture keeps the tablet visual uncluttered. */
+.site.ref-mode #work .story-company-website img[src$="setevie-architecture-v74.jpg"]{object-position:center center}
 
 /* Reuse the approved CYCLE wordmark on the white information panel. */
 .site.ref-mode #work .story-company-logo[src$="cycle-logo.svg"]{filter:invert(1)}
