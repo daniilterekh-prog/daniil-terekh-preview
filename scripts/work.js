@@ -22,9 +22,11 @@ function renderScreens(){
   const logo=element('img','story-company-logo');logo.src=c.logo;logo.alt=c.name;logo.decoding='async';
   const brief=element('p','story-company-brief',c.companyBrief);
   const role=element('h3','story-company-role',c.role);
+  const position=element('div','story-company-position');position.append(role);
+  if(c.period)position.append(element('p','story-company-period',c.period));
   const link=element('a','story-company-case');link.href='#experience/'+c.id;link.innerHTML='<span>EXPLORE THE CASE</span>'+arrow;link.setAttribute('aria-label','View '+c.name+' case study');
   link.addEventListener('click',()=>{lastRouteScroll=window.scrollY;lastRouteFocus=document.activeElement;detailReturn='work';});
-  info.append(logo,brief,role,link);
+  info.append(logo,brief,position,link);
   const website=element('div','story-company-website'),img=element('img');img.src=c.homepageScreen;img.alt=c.homepageAlt||c.name+' — company homepage';img.loading=i<2?'eager':'lazy';img.decoding='async';website.append(img);
   const highlights=(c.tabletRecognition||[]).filter(item=>c.awards?.[item.index]);
   if(highlights.length){
@@ -132,7 +134,7 @@ function scrollInstant(top){window.scrollTo({top:Math.max(0,top),behavior:'insta
 function focusTitle(page){const heading=page.querySelector('h1');heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});}
 function renderDetail(c){
  byId('detailName').textContent=c.name;byId('detailHeadline').textContent=c.headline;
- byId('detailRole').replaceChildren(...[c.role,c.location,c.sector].map(t=>element('span','',t)));
+ byId('detailRole').replaceChildren(...[c.role,c.period,c.location,c.sector].filter(Boolean).map(t=>element('span','',t)));
  byId('detailImage').parentElement.hidden=!c.image;
  if(c.image){byId('detailImage').src=c.image;byId('detailImage').alt=c.imageAlt||c.name+' — company homepage';}
  byId('detailDesc').textContent=c.intro;
@@ -197,14 +199,14 @@ function applyRoute(){
 function renderAll(){
  const featured=byId('allList'),more=byId('moreList');featured.replaceChildren();more.replaceChildren();
  for(const c of allProjects){
-  const link=element('a',c.featured?'archive-card':'experience-row');link.href='#experience/'+c.id;link.setAttribute('aria-label','View '+c.name+' — '+c.role);
+  const link=element('a',c.featured?'archive-card':'experience-row');link.href='#experience/'+c.id;link.setAttribute('aria-label','View '+c.name+' — '+[c.role,c.period].filter(Boolean).join(' · '));
   link.addEventListener('click',()=>{archiveScroll=window.scrollY;lastRouteFocus=document.activeElement;detailReturn='all';});
   if(c.featured){
    const visual=element('div','archive-card-visual'),img=element('img');img.src=c.image;img.alt=c.imageAlt||c.name+' — company homepage';img.loading='lazy';img.decoding='async';
    const icon=element('span','case-arrow');icon.innerHTML=arrow;visual.append(img,icon);
-   const copy=element('div','archive-card-copy');copy.append(element('h3','',c.name),element('span','archive-card-sector',c.sector),element('p','',c.summary),element('span','archive-card-role',c.role+' · '+c.location));link.append(visual,copy);featured.append(link);
+   const copy=element('div','archive-card-copy');copy.append(element('h3','',c.name),element('span','archive-card-sector',c.sector),element('p','',c.summary),element('span','archive-card-role',[c.role,c.period,c.location].filter(Boolean).join(' · ')));link.append(visual,copy);featured.append(link);
   }else{
-   const title=element('div');title.append(element('h3','',c.name),element('span','experience-row-role',c.role+' · '+c.location));link.append(title,element('p','',c.summary));link.insertAdjacentHTML('beforeend',arrow);more.append(link);
+   const title=element('div');title.append(element('h3','',c.name),element('span','experience-row-role',[c.role,c.period,c.location].filter(Boolean).join(' · ')));link.append(title,element('p','',c.summary));link.insertAdjacentHTML('beforeend',arrow);more.append(link);
   }
  }
  applyArchiveFilter();

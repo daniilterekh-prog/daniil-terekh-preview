@@ -1,12 +1,14 @@
 (function(root){
  'use strict';
- // Dates and disputed performance figures remain omitted pending verification.
+ // Work periods are shown only where confirmed by the owner.
+ // Disputed performance figures remain omitted pending verification.
  const projects=[
   {
     "id": "barn-estate",
     "name": "BARN ESTATE",
     "featured": true,
     "role": "Head of Digital Partnerships",
+    "period": "2026",
     "location": "Moscow · Russia",
     "sector": "Premium real estate",
     "tags": "STRATEGY / PERFORMANCE / TECHNOLOGY",
@@ -39,6 +41,7 @@
     "name": "BARNES INTERNATIONAL",
     "featured": true,
     "role": "Head of Digital · Moscow team",
+    "period": "2025–2026",
     "location": "Moscow · Russia",
     "sector": "Premium real estate",
     "tags": "STRATEGY / PERFORMANCE / TECHNOLOGY",
@@ -121,6 +124,7 @@
     "name": "CYCLE",
     "featured": true,
     "role": "Agency Director",
+    "period": "2026",
     "location": "Europe · Worldwide",
     "sector": "Strategy, creative & digital",
     "tags": "STRATEGY / CREATIVE / DELIVERY",
@@ -154,6 +158,7 @@
     "name": "MK ELIT",
     "featured": true,
     "role": "Digital Marketing Lead",
+    "period": "2022–2023",
     "location": "Saint Petersburg · Russia",
     "sector": "Luxury real estate",
     "tags": "FUNNELS / CRM / PARTNERSHIPS",
@@ -317,6 +322,7 @@
     "name": "EVA REAL ESTATE",
     "featured": true,
     "role": "Head of PPC · Project work",
+    "period": "2025",
     "location": "Dubai · International audiences",
     "sector": "Real estate",
     "tags": "GOOGLE ADS / YOUTUBE / ANALYTICS",
@@ -425,6 +431,7 @@
     "name": "SETEVIE",
     "featured": true,
     "role": "Head of Projects",
+    "period": "2023–2025",
     "location": "Saint Petersburg · Multi-project agency",
     "sector": "Marketing agency",
     "tags": "TEAM / STRATEGY / OPERATIONS",
