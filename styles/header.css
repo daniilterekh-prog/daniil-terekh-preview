@@ -3,7 +3,8 @@ html{scroll-padding-top:var(--header-height)}
 html.nav-open,html.nav-open body{overflow:hidden}
 #site{padding-top:var(--header-height)}
 .site-header{position:fixed;z-index:80;inset:0 0 auto;min-height:var(--header-height);display:flex;align-items:center;gap:28px;padding:env(safe-area-inset-top,0px) 5.34% 0;background:#fff;color:#141514;border-bottom:1px solid #deded9;font:12px/1.2 var(--sans);letter-spacing:.01em}
-.header-name{font-size:11px;font-weight:600;letter-spacing:.07em;margin-right:auto;white-space:nowrap;min-height:51px;display:inline-flex;align-items:center}
+.header-name{font-size:11px;font-weight:600;letter-spacing:.07em;margin-right:auto;white-space:nowrap;min-height:51px;display:inline-flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px}
+.header-role{font-size:10px;font-weight:400;letter-spacing:.01em;color:#555652}
 .header-navigation ul{display:flex;gap:24px;align-items:center;list-style:none;margin:0;padding:0}
 .header-navigation a{position:relative;display:flex;align-items:center;min-height:51px;color:#5a5b57;white-space:nowrap}
 .header-navigation a:hover,.header-navigation a[aria-current]{color:#111}
@@ -16,6 +17,8 @@ html.nav-open,html.nav-open body{overflow:hidden}
 .site.ref-mode #work .story-sticky{top:var(--header-height)}
 .skip-link{z-index:100}
 @media(max-width:800px){
+ .site-header:not(.is-enhanced){position:relative}
+ .site-header:not(.is-enhanced)+:is(#site,main){padding-top:0}
  .site-header{padding-inline:6%;gap:22px;flex-wrap:wrap}
  .header-name{font-size:10px}
  .header-contact{font-size:11px;gap:9px}

@@ -31,9 +31,12 @@
   const focusWasToggle=document.activeElement===toggle;setMenu(false);
   if(focusWasToggle&&!narrow.matches)links[0].focus({preventScroll:true});
  });
+ header.addEventListener('click',event=>{if(event.target instanceof Element&&event.target.closest('a'))setMenu(false);});
+ // Standalone pages use native links and scrolling, with the same disclosure menu.
+ if(document.body.dataset.page==='services')return;
  function activate(key){
   for(const link of links){
-   if(link.dataset.navTarget===key)link.setAttribute('aria-current','location');
+   if(link.dataset.navTarget===key)link.setAttribute('aria-current',main.hidden?'page':'location');
    else link.removeAttribute('aria-current');
   }
  }
