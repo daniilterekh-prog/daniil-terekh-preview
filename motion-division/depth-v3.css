@@ -149,7 +149,7 @@ body{overflow-x:clip}
 /* Portrait framing intentionally prioritizes the actual objects. */
 @media(max-width:800px){
  .world-auto .world-image{object-position:79% center!important}
- .world-yacht .world-image{object-position:86% center!important}
+ .world-yacht .world-image{object-position:74% center!important}
  .world-yacht .md-room-door{opacity:.24}
  .world-yacht .md-room-arch{opacity:.35}
 }
