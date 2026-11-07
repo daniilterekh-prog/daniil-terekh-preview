@@ -39,14 +39,18 @@
     const hero=frame(chapters[0],vh), seam=frame(chapters[1],vh), platform=frame(chapters[2],vh);
     const corridor=clamp(smooth(.66,.97,hero)*(1-smooth(.73,.99,seam)));
     const gallery=smooth(.60,.98,seam);
+    const open=smooth(.12,.79,seam);
+    put(root,"--md-door-open",open.toFixed(4));
+    put(root,"--md-door-push",(open*Math.min(window.innerWidth*.29,420)).toFixed(1)+"px");
+    put(root,"--md-aperture-scale",(1+open*.65).toFixed(3));
     put(root,"--md-corridor-opacity",corridor.toFixed(4));
     put(root,"--md-platform-opacity",gallery.toFixed(4));
     // Perspective camera travels forward through six nested metallic frames.
-    put(root,"--md-cam-z",(-70+seam*1620).toFixed(1)+"px");
+    put(root,"--md-cam-z",(-70+seam*960).toFixed(1)+"px");
     put(root,"--md-cam-x",((seam-.5)*8*gallery).toFixed(1)+"px");
     put(root,"--md-cam-y",(-15*seam).toFixed(1)+"px");
     put(root,"--md-cam-roll",((seam-.5)*-0.7).toFixed(2)+"deg");
-    put(root,"--md-platform-z",(-1720+platform*320).toFixed(1)+"px");
+    put(root,"--md-platform-z",(-1080+platform*320).toFixed(1)+"px");
     put(root,"--md-hero-scale",(1+hero*.22).toFixed(4));
     put(root,"--md-seam-scale",(1+seam*.16).toFixed(4));
     put(root,"--md-platform-scale",(1.04+platform*.075).toFixed(4));

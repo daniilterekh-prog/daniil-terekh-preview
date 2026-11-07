@@ -153,3 +153,10 @@ body{overflow-x:clip}
  .world-yacht .md-room-door{opacity:.24}
  .world-yacht .md-room-arch{opacity:.35}
 }
+
+/* V3 motion polish: shutters open as the camera enters; all layers stay behind
+   the perspective clipping plane for readable geometry on reverse scroll. */
+.md-metal-wing-left{transform:translateX(calc(0px - var(--md-door-push,0px))) translateZ(-180px) rotateY(67deg)}
+.md-metal-wing-right{transform:translateX(var(--md-door-push,0px)) translateZ(-180px) rotateY(-67deg)}
+.md-aperture{transform:translate(-50%,-50%) translateZ(-1560px) scale(var(--md-aperture-scale,1));transform-origin:center center}
+@media(prefers-reduced-motion:reduce){.md-metal-wing-left,.md-metal-wing-right,.md-aperture{transform:none!important}}
