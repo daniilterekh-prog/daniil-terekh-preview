@@ -145,3 +145,11 @@ body{overflow-x:clip}
 .engine-slices{z-index:1}
 .engine-slice{opacity:.77}
 @media(max-width:800px){.engine-sculpture::before{opacity:.94;filter:grayscale(.15) brightness(.88)}.engine-slice{opacity:.7}}
+
+/* Portrait framing intentionally prioritizes the actual objects. */
+@media(max-width:800px){
+ .world-auto .world-image{object-position:79% center!important}
+ .world-yacht .world-image{object-position:86% center!important}
+ .world-yacht .md-room-door{opacity:.24}
+ .world-yacht .md-room-arch{opacity:.35}
+}
