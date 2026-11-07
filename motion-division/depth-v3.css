@@ -138,3 +138,10 @@ body{overflow-x:clip}
 .world-yacht .md-room-line{opacity:.42}
 .world-yacht .md-room-reflection{opacity:.55}
 }
+
+/* The complete car remains visually grounded behind the separate depth planes.
+   Disassembly must reveal form rather than turning the subject into empty gaps. */
+.engine-sculpture::before{content:"";position:absolute;inset:0;z-index:0;background-image:url("https://d2ol7oe51mr4n9.cloudfront.net/user_3LYfsncNUNmrQZphq638E2FB1PG/1770212e-fdf0-42ac-a8ff-cd81494d48b8.webp");background-size:cover;background-position:57% center;filter:grayscale(.22) brightness(.77);opacity:.88}
+.engine-slices{z-index:1}
+.engine-slice{opacity:.77}
+@media(max-width:800px){.engine-sculpture::before{opacity:.94;filter:grayscale(.15) brightness(.88)}.engine-slice{opacity:.7}}
