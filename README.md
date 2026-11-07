@@ -1,8 +1,10 @@
 # Daniil Terekh — website preview
 
-[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=work-button-v75#home) · [Кейсы](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=work-button-v75#experience/all) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/services/?v=work-button-v75)
+[Открыть сайт](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=case-images-v76#home) · [Кейсы](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=case-images-v76#experience/all) · [Услуги](https://daniilterekh-prog.github.io/daniil-terekh-preview/services/?v=case-images-v76)
 
-Обновлено 6 ноября 2026 по поручению владельца. Source commit `4c0ab79cc68763f7b19f25d3f9d11b529f2851d1`, сборка `website/site/dist`.
+Обновлено 7 ноября 2026 по поручению владельца. Source commit `4a3c7548ba298b320ff20fafe096cf4d21b7dae4`, сборка `website/site/dist`.
+
+На мобильных страницах кейсов убрана рамка фиксированной высоты вокруг изображений: высота теперь соответствует пропорциям кадра, без пустых серых полей и обрезки. Проверены все 12 кейсов на 320, 390, 430, 720 и 1440 px.
 
 Кнопка View all cases под планшетом поднята: на компьютере на 32 px, на телефоне — до 48 px с ограничением по доступному месту. На коротком горизонтальном экране остаётся в левой колонке. Проверены 10 размеров экрана, переход в каталог и отсутствие перекрытий.
 
@@ -14,7 +16,7 @@
 
 Стрелки в кнопках и ссылках переведены из текстовых символов в тонкие SVG из существующего набора проекта. Они сохраняют обычный вид на телефонах, без emoji-шрифта. Обновлены хедер, контакты, кейсы, награды планшета и услуги; адреса и действия сохранены.
 
-В [Still Curious](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=work-button-v75#human) указан актуальный стаж 8 лет, международные кампании, бюджеты до $1 800 в день и образование в маркетинге. В MK ELIT и Setevie добавлены результаты по уточнениям владельца. В MK ELIT также описано внедрение AI-аналитики звонков.
+В [Still Curious](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=case-images-v76#human) указан актуальный стаж 8 лет, международные кампании, бюджеты до $1 800 в день и образование в маркетинге. В MK ELIT и Setevie добавлены результаты по уточнениям владельца. В MK ELIT также описано внедрение AI-аналитики звонков.
 
 В планшете BARNES, MK ELIT, EVA и Setevie показаны выбранные награды компаний. Карточка открывает полный список в кейсе, Back возвращает к исходному слайду. На телефоне — один акцент, на широком экране — два. На коротком горизонтальном экране кнопка каталога не перекрывает кнопку кейса.
 
@@ -24,11 +26,11 @@
 
 Семь панелей How can I help объясняют задачу, состав работы и результат. Направления и цены сохранены; текст для руководящей роли остаётся отдельным равноправным сценарием.
 
-В [Find the Signal](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=work-button-v75#thinking) усилен разлёт слов: сжатие перед импульсом, глубина и разные размеры букв, последовательная сборка в результаты. Стекло контрастнее при приближении. Четыре остановки и точный обратный проход сохранены; reduced motion показывает цельные фразы.
+В [Find the Signal](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=case-images-v76#thinking) усилен разлёт слов: сжатие перед импульсом, глубина и разные размеры букв, последовательная сборка в результаты. Стекло контрастнее при приближении. Четыре остановки и точный обратный проход сохранены; reduced motion показывает цельные фразы.
 
-Все кнопки связи открывают [общее окно](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=work-button-v75#connect) с WhatsApp, Telegram, Email, Callback и WeChat. WhatsApp `+79936107310` и Telegram `@daniilterekh` открывают чат с темой услуги, проекта или роли. Email работает, WeChat показывает номер `+38269722229` с копированием. Callback — одно поле для номера посетителя: кнопка Continue in Telegram открывает подготовленную заявку, которую посетитель отправляет сам. Окно и форма доступны на главной, в кейсах и на странице услуг. Используются официальные форматы ссылок [WhatsApp](https://faq.whatsapp.com/5913398998672934) и [Telegram](https://core.telegram.org/api/links#public-username-links).
+Все кнопки связи открывают [общее окно](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=case-images-v76#connect) с WhatsApp, Telegram, Email, Callback и WeChat. WhatsApp `+79936107310` и Telegram `@daniilterekh` открывают чат с темой услуги, проекта или роли. Email работает, WeChat показывает номер `+38269722229` с копированием. Callback — одно поле для номера посетителя: кнопка Continue in Telegram открывает подготовленную заявку, которую посетитель отправляет сам. Окно и форма доступны на главной, в кейсах и на странице услуг. Используются официальные форматы ссылок [WhatsApp](https://faq.whatsapp.com/5913398998672934) и [Telegram](https://core.telegram.org/api/links#public-username-links).
 
-В In Practice убрана соединительная линия с точкой между пунктами и папкой. Правая композиция опущена и выровнена по центру левой колонки. [Открыть блок](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=work-button-v75#evidence).
+В In Practice убрана соединительная линия с точкой между пунктами и папкой. Правая композиция опущена и выровнена по центру левой колонки. [Открыть блок](https://daniilterekh-prog.github.io/daniil-terekh-preview/?v=case-images-v76#evidence).
 
 Первый экран по запросу владельца оставлен только с именем и исходным слоганом. Дополнительные тексты, кнопки и подпись BARNES убраны. Верхняя навигация теперь закреплена на белом фоне. Планшет дополнительно поднят, чтобы больше кейса попадало в Hero; видимая кнопка первого кейса доступна уже при появлении устройства.
 
@@ -36,6 +38,6 @@
 
 Фильм запрашивается только после нажатия Play с официального источника https://barn-estate.ru/upload/barnes.mp4. Приватные исходники, материалы аудита и архив в этот репозиторий не копируются.
 
-Предыдущая опубликованная версия: `0e6a9ce9ec2ef8beddad51ec475d061ef9dab58a` в истории Git.
+Предыдущая опубликованная версия: `0488e6aa8faf3ea243cc06364dfa4cfdfb641c66` в истории Git.
 
 Иконки контактов: [Bootstrap Icons 1.13.1](https://github.com/twbs/icons/tree/v1.13.1), MIT, пять inline SVG без runtime-зависимостей. [Лицензия](assets/licenses/bootstrap-icons-LICENSE.txt).
