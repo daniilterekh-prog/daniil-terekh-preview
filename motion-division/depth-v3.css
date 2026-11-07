@@ -126,3 +126,15 @@ body{overflow-x:clip}
  .engine-room[data-step="3"] .engine-slice:nth-child(4){transform:translate3d(12px,-16px,67px) rotateY(9deg)}
  .course-route{transform:none!important}
 }
+
+/* V3 visual QA corrections: the Engine must feature the vehicle, not a wall.
+   Yachting foreground architecture becomes lighter on small screens. */
+.engine-slice{background-image:url("https://d2ol7oe51mr4n9.cloudfront.net/user_3LYfsncNUNmrQZphq638E2FB1PG/1770212e-fdf0-42ac-a8ff-cd81494d48b8.webp")}
+.md-column-left{opacity:.35}
+.md-column-right{opacity:.64;box-shadow:16px 0 36px rgba(52,67,76,.15),-12px 0 28px rgba(91,112,121,.17)}
+@media(max-width:800px){
+.world-yacht .md-room-door{opacity:.37}
+.world-yacht .md-room-arch{opacity:.46}
+.world-yacht .md-room-line{opacity:.42}
+.world-yacht .md-room-reflection{opacity:.55}
+}
