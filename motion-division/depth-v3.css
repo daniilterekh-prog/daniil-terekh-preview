@@ -8,7 +8,7 @@
 :root{--md-graphite:#101417;--md-cold:#bec7ca;--md-ivory:#eef1f1}
 html{scroll-behavior:smooth}
 body{overflow-x:clip}
-.journey-stage{--md-cam-z:0px;--md-cam-x:0px;--md-cam-y:0px;--md-cam-roll:0deg;--md-corridor-opacity:0;--md-platform-opacity:0;--md-platform-z:-530px;--md-hero-scale:1;--md-platform-scale:1}
+.journey-stage{--md-cam-z:0px;--md-cam-x:0px;--md-cam-y:0px;--md-cam-roll:0deg;--md-corridor-opacity:0;--md-platform-opacity:0;--md-platform-z:-1720px;--md-hero-scale:1;--md-platform-scale:1}
 .md-rig{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;perspective:1100px;perspective-origin:50% 48%;contain:paint}
 .md-camera{position:absolute;inset:0;transform-style:preserve-3d;transform:translate3d(var(--md-cam-x),var(--md-cam-y),var(--md-cam-z)) rotateZ(var(--md-cam-roll));will-change:transform}
 .md-corridor,.md-platform{position:absolute;inset:0;transform-style:preserve-3d;will-change:opacity}
