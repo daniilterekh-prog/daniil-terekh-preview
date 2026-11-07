@@ -46,7 +46,7 @@
     put(root,"--md-cam-x",((seam-.5)*8*gallery).toFixed(1)+"px");
     put(root,"--md-cam-y",(-15*seam).toFixed(1)+"px");
     put(root,"--md-cam-roll",((seam-.5)*-0.7).toFixed(2)+"deg");
-    put(root,"--md-platform-z",(-530+platform*570).toFixed(1)+"px");
+    put(root,"--md-platform-z",(-1720+platform*320).toFixed(1)+"px");
     put(root,"--md-hero-scale",(1+hero*.22).toFixed(4));
     put(root,"--md-seam-scale",(1+seam*.16).toFixed(4));
     put(root,"--md-platform-scale",(1.04+platform*.075).toFixed(4));
