@@ -1,7 +1,7 @@
 (function(){
 "use strict";
 const chapterEls=Array.from(document.querySelectorAll("[data-chapter]"));
-const navTargets=["reveal","seam","atrium","automotive","yachting"].map(id=>document.getElementById(id));
+const navTargets=["reveal","seam","atrium","automotive","engine","yachting","course"].map(id=>document.getElementById(id));
 const rails=Array.from(document.querySelectorAll(".index-link"));
 const journey=document.getElementById("journey");
 const films=Array.from(document.querySelectorAll("[data-film]"));
@@ -33,7 +33,7 @@ function update(){
  if(index!==activeNav){
   activeNav=index;
   document.body.dataset.active=String(index);
-  const light=index===2||index===5;
+  const light=index===2||index===6;
   document.body.dataset.theme=light?"light":"dark";
   rails.forEach((a,i)=>{
    a.classList.toggle("is-current",i===index);
@@ -145,4 +145,59 @@ dialogSwitch.addEventListener("click",()=>setRoom(content[openWorld]?.next||"aut
 document.getElementById("dialog-close").addEventListener("click",()=>dialog.close());
 dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close()});
 dialog.addEventListener("close",()=>document.body.classList.remove("dialog-open"));
+}
+const engineRoot=document.getElementById("engine");
+const engineTabs=Array.from(document.querySelectorAll("[data-engine-step]"));
+const engineText=document.getElementById("engine-desc");
+const engineLabel=document.getElementById("engine-label");
+const engineCount=document.getElementById("engine-count");
+const engineTopics=[
+ ["POSITIONING","Understand the enthusiast, collector and next generation of premium automotive buyers."],
+ ["CREATIVE","Turn engineering, craftsmanship and motion into a compelling visual narrative."],
+ ["PERFORMANCE","Connect considered creative with qualified demand, media channels and measurable outcomes."],
+ ["DIGITAL EXPERIENCE","Create a digital world as deliberate and refined as the physical object."]
+];
+function selectEngine(i){
+ let n=(i+engineTopics.length)%engineTopics.length;
+ engineRoot.dataset.step=String(n);
+ engineTabs.forEach((tab,j)=>{let on=n===j;tab.classList.toggle("active",on);tab.setAttribute("aria-pressed",String(on))});
+ engineLabel.textContent="0"+(n+1)+" / "+engineTopics[n][0];
+ engineCount.textContent="0"+(n+1)+" / 04";
+ engineText.textContent=engineTopics[n][1];
+}
+engineTabs.forEach((tab,i)=>{tab.addEventListener("click",()=>selectEngine(i));tab.addEventListener("keydown",e=>{if(!["ArrowDown","ArrowUp","ArrowRight","ArrowLeft","Home","End"].includes(e.key))return;e.preventDefault();const n=e.key==="Home"?0:e.key==="End"?3:(i+(e.key==="ArrowDown"||e.key==="ArrowRight"?1:-1)+4)%4;selectEngine(n);engineTabs[n].focus()})});
+const course=document.getElementById("course");
+const courseTabs=Array.from(document.querySelectorAll("[data-course-stop]"));
+const courseName=document.getElementById("course-name");
+const courseDesc=document.getElementById("course-desc");
+const courseCount=document.getElementById("course-count");
+const courseTags=document.getElementById("course-tags");
+const courses=[
+ ["SHIPYARDS","Communicate craftsmanship, provenance and engineering to an international clientele.",["Brand story","Launch strategy"]],
+ ["BROKERAGE","Connect exceptional yachts with high-intent buyers through considered content and targeted demand.",["Buyer intent","Performance"]],
+ ["CHARTER","Turn the promise of a remarkable journey into a memorable digital experience.",["Experience design","Campaigns"]],
+ ["MARINAS","Present a destination as a cultural landmark, not just a place to dock.",["Destination identity","Market entry"]]
+];
+function selectCourse(i){
+ let n=(i+courses.length)%courses.length;
+ course.dataset.stop=String(n);
+ courseTabs.forEach((tab,j)=>{let on=n===j;tab.classList.toggle("active",on);tab.setAttribute("aria-pressed",String(on))});
+ courseCount.textContent="0"+(n+1)+" / 04";
+ courseName.textContent=courses[n][0];courseDesc.textContent=courses[n][1];
+ courseTags.replaceChildren();courses[n][2].forEach(s=>{const span=document.createElement("span");span.textContent=s;courseTags.append(span)});
+}
+courseTabs.forEach((tab,i)=>{tab.addEventListener("click",()=>selectCourse(i));tab.addEventListener("keydown",e=>{if(!["ArrowDown","ArrowUp","ArrowRight","ArrowLeft","Home","End"].includes(e.key))return;e.preventDefault();const n=e.key==="Home"?0:e.key==="End"?3:(i+(e.key==="ArrowDown"||e.key==="ArrowRight"?1:-1)+4)%4;selectCourse(n);courseTabs[n].focus()})});
+const manifesto=document.getElementById("manifesto");
+const footer=document.querySelector(".footer");
+const originalUpdate=update;
+update=function(){
+ originalUpdate();
+ const focus=window.innerHeight*.48;
+ const boxCourse=course.getBoundingClientRect();
+ const boxManifesto=manifesto.getBoundingClientRect();
+ const boxFooter=footer.getBoundingClientRect();
+ const bright=(activeNav===2)||(boxCourse.top<=focus&&boxCourse.bottom>focus)||(boxManifesto.top<=focus&&boxManifesto.bottom>focus);
+ document.body.dataset.theme=boxFooter.top<=focus?"dark":bright?"light":"dark";
+};
+
 })();

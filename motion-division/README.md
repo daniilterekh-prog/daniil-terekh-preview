@@ -30,3 +30,11 @@ Media is hosted via public CYCLE prototype assets on the asset CDN; access to th
 4. Integrate verified CYCLE case studies and services when actual assets are provided.
 
 This directory is isolated from the existing website and real-estate tower.
+
+
+## V2: Two distinct interactive rooms
+- Automotive now has The Engine, a four-layer visual breakdown of Positioning, Creative, Performance and Digital Experience.
+- Yachting now has The Course, a calming interactive maritime route: Shipyards, Brokerage, Charter, Marinas.
+- Both support keyboard and touch selection, mobile layouts and reduced-motion behavior.
+- Three video posters now use exact encoded first frames to avoid startup jumps.
+- Main navigation has seven stops; no unrelated folders were modified.
