@@ -145,7 +145,6 @@ dialogSwitch.addEventListener("click",()=>setRoom(content[openWorld]?.next||"aut
 document.getElementById("dialog-close").addEventListener("click",()=>dialog.close());
 dialog.addEventListener("click",event=>{if(event.target===dialog)dialog.close()});
 dialog.addEventListener("close",()=>document.body.classList.remove("dialog-open"));
-}
 const engineRoot=document.getElementById("engine");
 const engineTabs=Array.from(document.querySelectorAll("[data-engine-step]"));
 const engineText=document.getElementById("engine-desc");
