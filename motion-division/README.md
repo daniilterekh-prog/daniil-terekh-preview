@@ -38,3 +38,7 @@ This directory is isolated from the existing website and real-estate tower.
 - Both support keyboard and touch selection, mobile layouts and reduced-motion behavior.
 - Three video posters now use exact encoded first frames to avoid startup jumps.
 - Main navigation has seven stops; no unrelated folders were modified.
+
+
+## V3: Physical depth pass
+See [DEPTH-V3.md](DEPTH-V3.md) for original audit, scope and implementation. The browser now renders authored CSS 3D architecture driven by scroll: a six-frame tunnel, volumetric gallery, pinned vehicle/yacht rooms, depth-separated automotive panels, and water parallax. True CGI vehicles remain a later production asset.
